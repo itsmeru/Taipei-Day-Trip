@@ -4,7 +4,7 @@ import re
 def connect_mysql():
     con=mysql.connector.connect(
         user="root",
-        password="betty520",
+        password="",
         host="localhost",
         database="spot"
     )
