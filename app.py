@@ -4,11 +4,12 @@ from fastapi.responses import FileResponse
 import mysql.connector.pooling
 from fastapi.responses import JSONResponse
 import math
+import os
 app=FastAPI()
 dbconfig = {
     "database": "spot",
     "user": "root",
-    "password": ""
+    "password": os.environ['MYSQL_PASSWORD']
 }
 cnxpool = mysql.connector.pooling.MySQLConnectionPool(pool_name="mypool", pool_size=5, **dbconfig)
 @app.middleware("http")
