@@ -3,11 +3,12 @@ from pydantic import BaseModel
 from fastapi.responses import FileResponse
 import mysql.connector.pooling
 from fastapi.responses import JSONResponse
+import math
 app=FastAPI()
 dbconfig = {
     "database": "spot",
     "user": "root",
-    "password": ""
+    "password": "betty520"
 }
 cnxpool = mysql.connector.pooling.MySQLConnectionPool(pool_name="mypool", pool_size=5, **dbconfig)
 @app.middleware("http")
@@ -31,14 +32,17 @@ async def get_data(request:Request):
 
 @app.get("/api/attractions")
 async def attractions(request: Request, page: int = Query(0, description="要取得的分頁，每頁 12 筆資料"), keyword: str = Query("", description="用來完全比對捷運站名稱、或模糊比對景點名稱的關鍵字，沒有給定則不做篩選")):
-    
     items_per_page = 12
     start_index = page * items_per_page
     db_pool = request.state.db_pool
 	
     with db_pool.get_connection() as con:
         with con.cursor(dictionary=True) as cursor:
-            cursor.execute("SELECT * FROM spots WHERE description LIKE %s LIMIT %s,%s", ('%' + keyword + '%', start_index, items_per_page))
+            cursor.execute("SELECT COUNT(*) FROM spots")
+            results = cursor.fetchone()
+            total_pages = results["COUNT(*)"]
+            count_page = math.ceil(total_pages/12)
+            cursor.execute("SELECT * FROM spots WHERE (id >= %s AND id <= %s) AND (MRT = %s OR name LIKE %s)", (start_index, start_index + 12, keyword, '%' + keyword + '%'))
             results = cursor.fetchall()
             if not results:
                 data = {"error": True, "message": "找不到對應的資料"}
@@ -62,7 +66,8 @@ async def attractions(request: Request, page: int = Query(0, description="要取
             "images": image_urls
         }
         attractions.append(attraction)
-    next_page = page + 1
+   
+    next_page = page + 1 if page + 1 < count_page else None
     data = {"nextPage": next_page, "data": attractions}
     return JSONResponse(content=data,media_type="application/json")
 
@@ -109,7 +114,7 @@ async def get_mrt(request: Request):
         db_pool = request.state.db_pool
         with db_pool.get_connection() as con:
             with con.cursor() as cursor:
-                cursor.execute("SELECT MRT FROM spots")
+                cursor.execute("SELECT DISTINCT MRT FROM spots")
                 results = cursor.fetchall()
             mrt_data = []
             for result in results:
