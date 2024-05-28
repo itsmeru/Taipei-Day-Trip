@@ -43,7 +43,7 @@ async def attractions(request: Request, page: int = Query(0, description="要取
             results = cursor.fetchone()
             total_pages = results["COUNT(*)"]
             count_page = math.ceil(total_pages/12)
-            cursor.execute("SELECT * FROM spots WHERE (id >= %s AND id <= %s) AND (MRT = %s OR name LIKE %s)", (start_index, start_index + 12, keyword, '%' + keyword + '%'))
+            cursor.execute("SELECT * FROM spots WHERE (MRT = %s OR name LIKE %s )LIMIT %s,%s", (keyword, '%' + keyword + '%',start_index,items_per_page))
             results = cursor.fetchall()
             if not results:
                 data = {"error": True, "message": "找不到對應的資料"}
