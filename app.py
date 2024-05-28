@@ -2,6 +2,7 @@ from fastapi import *
 from pydantic import BaseModel
 from fastapi.responses import FileResponse
 import mysql.connector.pooling
+from fastapi.responses import JSONResponse
 app=FastAPI()
 dbconfig = {
     "database": "spot",
@@ -41,7 +42,7 @@ async def attractions(request: Request, page: int = Query(0, description="要取
             results = cursor.fetchall()
             if not results:
                 data = {"error": True, "message": "找不到對應的資料"}
-                return Response(content=data, media_type="application/json; charset=utf-8")
+                return JSONResponse(content=data)
             
             cursor.execute("SELECT spots.id, spot_imgs.img_url FROM spots JOIN spot_imgs ON spots.id = spot_imgs.img_id GROUP BY spots.id, spot_imgs.img_url")
             datas =  cursor.fetchall()
@@ -63,7 +64,7 @@ async def attractions(request: Request, page: int = Query(0, description="要取
         attractions.append(attraction)
     next_page = page + 1
     data = {"nextPage": next_page, "data": attractions}
-    return Response(content=data, media_type="application/json; charset=utf-8")
+    return JSONResponse(content=data)
 
 
 @app.get("/api/attraction/{attractionId}")
@@ -76,7 +77,7 @@ async def attraction_spot(request: Request, attractionId: int):
                 result = cursor.fetchone()
                 if not result:
                     data = {"error": True, "message": "找不到此景點"}
-                    return Response(content=data, media_type="application/json; charset=utf-8")
+                    return JSONResponse(content=data)
                 
                 
                 cursor.execute("SELECT spot_imgs.id, spot_imgs.img_url FROM spots JOIN spot_imgs ON spots.id = spot_imgs.img_id WHERE spots.id = %s", (attractionId,))
@@ -97,10 +98,10 @@ async def attraction_spot(request: Request, attractionId: int):
                     "images": image_urls
                 }
                 data = {"data": attraction}  
-                return Response(content=data, media_type="application/json; charset=utf-8")
+                return JSONResponse(content=data)
     except :
         data = {"error": True, "message": "伺服器內部錯誤"}
-        return Response(content=data, media_type="application/json; charset=utf-8")
+        return JSONResponse(content=data)
 
 @app.get("/api/mrts")
 async def get_mrt(request: Request):
@@ -114,10 +115,10 @@ async def get_mrt(request: Request):
             for result in results:
                 mrt_data.append(result[0])
             data = {"data":mrt_data}
-            return Response(content=data, media_type="application/json; charset=utf-8")
+            return JSONResponse(content=data)
     except:
         data = {"error": True,"message": "伺服器內部錯誤"}
-        return Response(content=data, media_type="application/json; charset=utf-8")
+        return JSONResponse(content=data)
 		
 @app.get("/", include_in_schema=False)
 async def index(request: Request):
