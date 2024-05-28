@@ -7,7 +7,7 @@ app=FastAPI()
 dbconfig = {
     "database": "spot",
     "user": "root",
-    "password": "betty520"
+    "password": ""
 }
 cnxpool = mysql.connector.pooling.MySQLConnectionPool(pool_name="mypool", pool_size=5, **dbconfig)
 @app.middleware("http")
