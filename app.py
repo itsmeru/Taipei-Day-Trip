@@ -14,7 +14,6 @@ dbconfig = {
 cnxpool = mysql.connector.pooling.MySQLConnectionPool(pool_name="mypool", pool_size=5, **dbconfig)
 @app.middleware("http")
 async def attach_db_connection(request: Request, call_next):
-   
     request.state.db_pool = cnxpool
     response = await call_next(request)
     return response
@@ -22,14 +21,10 @@ async def attach_db_connection(request: Request, call_next):
 class attraction_type(BaseModel):
 	page: int = Query(0, description="要取得的分頁，每頁 12 筆資料")
 	keyword: str = Query("", description="關鍵字")
-@app.get("/", include_in_schema=False)
-async def get_data(request:Request):
-	# db_pool = request.state.db_pool
-	# cnx = db_pool.get_connection()
-	# with cnx.cursor() as cursor:
-	# 	cursor.execute("SELECT * FROM spots")
-	# 	data = cursor.fetchall()
-	return {"data": True}
+
+@app.get("api/user")
+async def signup():
+    pass
 
 @app.get("/api/attractions")
 async def attractions(request: Request, page: int = Query(0, description="要取得的分頁，每頁 12 筆資料"), keyword: str = Query("", description="用來完全比對捷運站名稱、或模糊比對景點名稱的關鍵字，沒有給定則不做篩選")):
@@ -68,7 +63,7 @@ async def attractions(request: Request, page: int = Query(0, description="要取
         }
         attractions.append(attraction)
    
-    next_page = page + 1 if page + 1 < count_page else None
+    next_page = page + 1 if page + 1 < count_page and page !=0 else None
     data = {"nextPage": next_page, "data": attractions}
     return JSONResponse(content=data,media_type="application/json")
 
@@ -128,7 +123,8 @@ async def get_mrt(request: Request):
 		
 @app.get("/", include_in_schema=False)
 async def index(request: Request):
-	return FileResponse("./static/index.html", media_type="text/html")
+    return {"data": True}
+	# return FileResponse("./static/index.html", media_type="text/html")
 @app.get("/attraction/{id}", include_in_schema=False)
 async def attraction(request: Request, id: int):
 	return FileResponse("./static/attraction.html", media_type="text/html")
