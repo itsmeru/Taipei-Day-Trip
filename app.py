@@ -110,7 +110,7 @@ async def get_mrt(request: Request):
         db_pool = request.state.db_pool
         with db_pool.get_connection() as con:
             with con.cursor() as cursor:
-                cursor.execute("SELECT DISTINCT MRT FROM spots")
+                cursor.execute("SELECT MRT,COUNT(MRT) AS count FROM spots GROUP BY MRT ORDER BY count DESC")
                 results = cursor.fetchall()
             mrt_data = []
             for result in results:
