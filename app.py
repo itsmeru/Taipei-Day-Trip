@@ -34,21 +34,20 @@ async def attractions(request: Request, page: int = Query(0, description="要取
 	
     with db_pool.get_connection() as con:
         with con.cursor(dictionary=True) as cursor:
-            cursor.execute("SELECT COUNT(*) FROM spots")
-            results = cursor.fetchone()
-            total_pages = results["COUNT(*)"]
-            count_page = math.ceil(total_pages/12)
-            cursor.execute("SELECT * FROM spots WHERE (MRT = %s OR name LIKE %s )LIMIT %s,%s", (keyword, '%' + keyword + '%',start_index,items_per_page))
+            cursor.execute("select * from spots where MRT = %s or name like %s",(keyword, '%' + keyword + '%'))
+            results = cursor.fetchall()
+            total_num = len(results)
+            total_page = total_num / 12
+            cursor.execute("select spots.*,imgs.imgs from spots join(select img_id,group_concat(img_url) as imgs from spot_imgs group by img_id) as imgs on spots.id=imgs.img_id WHERE (spots.MRT = %s OR spots.name LIKE %s ) LIMIT %s,%s", (keyword, '%' + keyword + '%',start_index,items_per_page))
             results = cursor.fetchall()
             if not results:
                 data = {"error": True, "message": "找不到對應的資料"}
                 return JSONResponse(content=data,media_type="application/json")
-            
-            cursor.execute("SELECT spots.id, spot_imgs.img_url FROM spots JOIN spot_imgs ON spots.id = spot_imgs.img_id GROUP BY spots.id, spot_imgs.img_url")
-            datas =  cursor.fetchall()
+           
     attractions = []
     for result in results:
-        image_urls = [data["img_url"] for data in datas if data["id"] == result["id"]]
+       
+        image_urls = result["imgs"].split(',') if result["imgs"] else []
         attraction = {
             "id": result["id"],
             "name": result["name"],
@@ -62,8 +61,8 @@ async def attractions(request: Request, page: int = Query(0, description="要取
             "images": image_urls
         }
         attractions.append(attraction)
-   
-    next_page = page + 1 if page + 1 < count_page and page !=0 else None
+  
+    next_page = page + 1 if page + 1 < total_page else None
     data = {"nextPage": next_page, "data": attractions}
     return JSONResponse(content=data,media_type="application/json")
 
