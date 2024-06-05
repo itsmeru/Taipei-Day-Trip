@@ -214,6 +214,7 @@
     }
 
     function showMrt(address){
+      
       let div = document.createElement("div");
       div.classList.add("mrt-name");
       let button = document.createElement("button");
@@ -221,6 +222,7 @@
       button.classList.add("list-item","body", "font-medium");
       button.onclick = function(){getSpot(address);search_input.value = address;}
       div.appendChild(button);
+      // container.appendChild(div);
       list_container.appendChild(div);
     }
     
