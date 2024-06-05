@@ -3,9 +3,238 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="static/css/font_var.css" />
+  <link rel="stylesheet" type="text/css" href="static/css/color_var.css" />
+  <link rel="stylesheet" type="text/css" href="static/css/index.css" />
   <title>Index</title>
 </head>
 <body>
+  <dialog id="login-dialog">
+    <div class="sign-in">
+      <div class="sign-in-title dialog-title font-bold">登入會員帳號</div>
+      <form method="dialog" class="dialog-form">
+        <input type="text" class="dialog-input body font-medium" name="email" placeholder="輸入電子信箱">
+        <input type="text" class="dialog-input body font-medium" name="password" placeholder="輸入密碼">
+        <button class="dialog-button  btn font-regular">登入帳戶</button>
+        <button class="sign-button" onclick="toggleDialogs('register-dialog')">還沒有註冊？點此註冊</button>
+        <div class="dialog-actions">
+          <button onclick="closeDialog('login-dialog')"><img src="/static/pic/x.png"></button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+  <dialog id="register-dialog">
+    <div class="sign-in">
+      <div class="sign-in-title dialog-title font-bold">註冊會員帳號</div>
+      <form method="dialog" class="dialog-form">
+        <input type="text" class="dialog-input body font-medium" name="name" placeholder="輸入姓名">
+        <input type="text" class="dialog-input body font-medium" name="email" placeholder="輸入電子信箱">
+        <input type="text" class="dialog-input body font-medium" name="password" placeholder="輸入密碼">
+        <button class="dialog-button  btn font-regular">註冊新帳戶</button>
+        <button class="sign-button" onclick="toggleDialogs('login-dialog')">已經有帳戶了？點此登入</button>
+        <div class="dialog-actions">
+          <button onclick="closeDialog('register-dialog')"><img src="/static/pic/x.png"></button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+  <nav>
+    <div class="nav-title">
+      <a href="#" class="headline">台北一日遊</a>
+      <div class="frame2">
+        <div class="frame1">
+          <button class="nav-btn body font-medium">預定行程</button>
+          <button class="nav-btn body font-medium " onclick="openDialog('login-dialog')">登入/註冊</button> 
+        </div>  
+      </div>
+    </div>
+  </nav>
   
+ 
+  <section class="welcome">
+    <div class="slogan-container">
+      <div class="slogan-content">
+        <div class="slogan">
+          <div class="slogan-title">輕鬆享受臺北一日悠閒</div>
+          <div class="body font-bold">探索每個角落，體驗城市的深度旅遊行程</div>
+        </div>
+        <div class="slogan-search">
+          <form action="/api/attractions" method="GET" class="search-form" onsubmit="getSpot(this.keyword.value);return false;">
+              <input type="text" name="keyword" placeholder="輸入景點名稱查詢" class="search-input body font-medium">
+              <button type="submit" class="search-button"><img src="/static/pic/search.png"></button>
+          </form>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <main>
+    <div class="list-bar">
+      <div class="left-container">
+        <button><img src="/static/pic/left.png"></button>
+      </div>
+      <div class="list-container">
+      </div>
+      <div class="right-container">
+        <button><img src="/static/pic/right.png"></button>
+      </div>
+    </div>
+    <div class="attractions"></div>
+  </main> 
+  <footer class="down body font-bold">COPYRIGHT © 2021 台北一日遊</footer>
 </body>
+<script>
+  function openDialog(dialogId) {
+    document.getElementById(dialogId).showModal();
+  }
+
+  function closeDialog(dialogId) {
+      document.getElementById(dialogId).close();
+  }
+
+  function toggleDialogs(openDialogId) {
+      let dialogs = document.querySelectorAll("dialog");
+      dialogs.forEach(dialog => dialog.close());
+      let dialog = document.getElementById(openDialogId);
+      if (openDialogId === "register-dialog") {
+        dialog.style.height = "332px";
+      } else {
+          dialog.style.height = "275px";
+      }
+      dialog.showModal();
+  }
+
+</script>
+<script>
+    let attractions = document.querySelector(".attractions");
+    let list_container = document.querySelector(".list-container");
+    let attractions_container = document.querySelector(".attractions");
+    let search_input = document.querySelector(".search-input");
+    let down = document.querySelector(".down");
+    async function getMrt(){
+      fetch("/api/mrts").then(res=>res.json())
+      .then(data=>{
+        for(let i= 0;i< data["data"].length;i++){
+          let address = data["data"][i];
+          if(address!=null){
+            showMrt(address);
+          }
+        }
+      }).catch(err=>console.error(err.message))
+    } getMrt();
+    let page = 0;
+    let next_page;
+    let loading = false;
+    let current_address = "";
+    async function getSpot(address="") {
+      if (loading) return;
+      loading = true;
+      try {
+        if(address){page = 0;}
+        let url = `/api/attractions?page=${page}`;
+        if(address){
+          current_address = address;
+          url+=`&keyword=${current_address}`
+          attractions_container.innerHTML = "";
+        }else if (current_address){
+          url+=`&keyword=${current_address}`
+        }
+        let res = await fetch(url);
+        let data = await res.json();
+        
+        next_page = data["nextPage"];
+        for (let i = 0; i < data["data"].length; i++) {
+          let attraction = data["data"][i];
+          let img = attraction["images"][0];
+          showSpot(attraction["name"], attraction["mrt"], attraction["category"], img);
+        }
+        if (next_page !== null) {
+          observer.observe(document.querySelector(".down")); 
+          page = next_page;
+        } else {
+          observer.disconnect();
+        }
+      } catch (err) {
+        console.error(err.message);
+      } finally {
+        loading = false;
+      }
+    } 
+        let observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            getSpot();
+          }
+        });
+      }, {
+        root: null,
+        threshold: 0.5
+      });
+
+  document.addEventListener("DOMContentLoaded", function() {
+    getSpot(); 
+    observer.observe(document.querySelector(".down")); 
+    });
+    
+    function showSpot(name,mrt_station,catego,img_url){
+      let attractions_group = document.createElement("div");
+      attractions_group.classList.add("attractions-group");
+
+      let container_img = document.createElement("div");
+      container_img.classList.add("container-img");
+      let attractions_img = document.createElement("img");
+      attractions_img.setAttribute("src", img_url);
+      attractions_img.classList.add("attractions-img");
+        
+      let attractions_text = document.createElement("div");
+      attractions_text.textContent = name;
+      attractions_text.classList.add("attractions-text","body","font-bold");
+
+      let attractions_info =document.createElement("div");
+      attractions_info.classList.add("attractions-info");
+
+      let mrt =document.createElement("div");
+      mrt.textContent = mrt_station;
+      mrt.classList.add("body","font-medium");
+
+      let category =document.createElement("div");
+      category.textContent = catego;
+      category.classList.add("body","font-medium");
+
+      container_img.appendChild(attractions_img);
+      container_img.appendChild(attractions_text);
+      attractions_info.appendChild(mrt);
+      attractions_info.appendChild(category);
+      attractions_group.appendChild(container_img);
+      attractions_group.appendChild(attractions_info);
+      attractions.appendChild(attractions_group);
+    }
+
+    function showMrt(address){
+      let div = document.createElement("div");
+      div.classList.add("mrt-name");
+      let button = document.createElement("button");
+      button.textContent = address;
+      button.classList.add("list-item","body", "font-medium");
+      button.onclick = function(){getSpot(address);search_input.value = address;}
+      div.appendChild(button);
+      list_container.appendChild(div);
+    }
+    
+    let leftButton = document.querySelector(".left-container button");
+      let rightButton = document.querySelector(".right-container button");
+
+      leftButton.addEventListener("click", function() {
+        list_container.scrollBy({ left: -400, behavior: "smooth" });
+      });
+
+      rightButton.addEventListener("click", function() {
+        list_container.scrollBy({ left: 400, behavior: "smooth" });
+      });
+    
+</script>
+
 </html>

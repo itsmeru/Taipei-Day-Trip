@@ -1,0 +1,80 @@
+:root {
+  --h-font-family: Noto Sans TC;
+  --bold-font-weight: 700;
+  --medium-font-weight: 500;
+  --regular-font-weight: 400;
+
+  --h1-font-size: 28px;
+  --h1-line-height: 24px;
+  
+  --h2-font-size: 30px;
+  --h2-line-height: 34px;
+
+  --h3-font-size: 24px;
+  --h3-line-height: 24px;
+
+  --btn-font-size: 19px;
+  --btn-line-height:16px;
+
+  --content-font-size: 16px;
+  --content-line-height:auto;
+
+  --body-font-size: 16px;
+  --body-line-height: 13.3px;
+
+  --catego-font-size: 14px;
+  --catego-line-height: auto;
+}
+
+
+
+.slogan-title{
+  font-family: var(--h-font-family);
+  font-weight: var(--bold-font-weight);
+  font-size: var(--h1-font-size);
+  line-height: var(--h1-line-height);
+}
+.headline{
+  font-family: var(--h-font-family);
+  font-weight: var(--bold-font-weight);
+  font-size: var(--h2-font-size);
+  line-height: var(--h2-line-height);
+}
+
+.dialog-title{
+  font-family: var(--h-font-family);
+  font-size: var(--h3-font-size);
+  line-height: var(--h3-line-height);
+}
+.btn{
+  font-family: var(--h-font-family);
+  font-size: var(--btn-font-size);
+  line-height: var(--btn-line-height);
+}
+.content{
+  font-family: var(--h-font-family);
+  font-size: var(--content-font-size);
+  line-height: var(--content-line-height);
+}
+
+.body{
+  font-family: var(--h-font-family);
+  font-size: var(--body-font-size);
+  line-height: var(--body-line-height);
+}
+
+.category{
+  font-family: var(--h-font-family);
+  font-size: var(--catego-font-size);
+  line-height: var(--catego-line-height);
+}
+
+.font-regular{
+  font-weight: var(--regular-font-weight);
+}
+.font-medium{
+  font-weight: var(--medium-font-weight);
+}
+.font-bold{
+  font-weight: var(--bold-font-weight);
+}
