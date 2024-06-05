@@ -1,4 +1,3 @@
-from MySQLdb import MySQLError
 from fastapi import *
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
@@ -10,7 +9,7 @@ import os
 app=FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 dbconfig = {
-    "database": "spot",
+    "database":"spot",
     "user": "root",
     "password": os.environ['MYSQL_PASSWORD']
 }
@@ -123,7 +122,6 @@ async def get_mrt(request: Request):
 		
 @app.get("/", include_in_schema=False)
 async def index(request: Request):
-    # return {"data": True}
 	return FileResponse("./static/index.html", media_type="text/html")
 @app.get("/attraction/{id}", include_in_schema=False)
 async def attraction(request: Request, id: int):
