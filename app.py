@@ -1,13 +1,15 @@
 from fastapi import *
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from fastapi.responses import FileResponse
 import mysql.connector.pooling
 from fastapi.responses import JSONResponse
-import math
 import os
+
 app=FastAPI()
+app.mount("/static", StaticFiles(directory="static"), name="static")
 dbconfig = {
-    "database": "spot",
+    "database":"spot",
     "user": "root",
     "password": os.environ['MYSQL_PASSWORD']
 }
@@ -73,16 +75,14 @@ async def attraction_spot(request: Request, attractionId: int):
         db_pool = request.state.db_pool
         with db_pool.get_connection() as con:
             with con.cursor(dictionary=True) as cursor:
-                cursor.execute("SELECT * FROM spots WHERE id = %s", (attractionId,))
+                cursor.execute("SELECT id FROM spots WHERE id = %s", (attractionId,))
                 result = cursor.fetchone()
                 if not result:
-                    data = {"error": True, "message": "找不到此景點"}
-                    return JSONResponse(content=data,media_type="application/json")
+                    raise HTTPException(status_code=404, detail={"error": True, "message": "找不到此景點"})
                 
                 
                 cursor.execute("SELECT spot_imgs.id, spot_imgs.img_url FROM spots JOIN spot_imgs ON spots.id = spot_imgs.img_id WHERE spots.id = %s", (attractionId,))
                 datas = cursor.fetchall()
-                
                 image_urls = [data["img_url"] for data in datas]
                 
                 attraction = {
@@ -98,7 +98,7 @@ async def attraction_spot(request: Request, attractionId: int):
                     "images": image_urls
                 }
                 data = {"data": attraction}  
-                return JSONResponse(content=data)
+                return JSONResponse(content=data,media_type="application/json")
     except :
         data = {"error": True, "message": "伺服器內部錯誤"}
         return JSONResponse(content=data,media_type="application/json")
@@ -122,8 +122,7 @@ async def get_mrt(request: Request):
 		
 @app.get("/", include_in_schema=False)
 async def index(request: Request):
-    return {"data": True}
-	# return FileResponse("./static/index.html", media_type="text/html")
+	return FileResponse("./static/index.html", media_type="text/html")
 @app.get("/attraction/{id}", include_in_schema=False)
 async def attraction(request: Request, id: int):
 	return FileResponse("./static/attraction.html", media_type="text/html")
