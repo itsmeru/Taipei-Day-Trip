@@ -127,6 +127,9 @@ venv.bak/
 .mypy_cache/
 .dmypy.json
 dmypy.json
+main.py
+spot.py
+spot.sql
 
 # Pyre type checker
 .pyre/
@@ -139,3 +142,4 @@ cython_debug/
 
 # macOS
 .DS_Store
+spot.sql

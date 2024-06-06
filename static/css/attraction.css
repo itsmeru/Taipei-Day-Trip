@@ -1,0 +1,60 @@
+hr{
+    width: 100%;
+    color:  black;
+    margin-top: 3.375rem;
+    height: 1px;
+}
+
+section{
+    width: 1200px;
+    height: 400px;
+    display: flex;
+    justify-content: space-around;
+    color: #666666;
+    gap: 30px;
+    padding: 0 15px;
+}
+img{
+    width: 100%;
+    height: 100%;
+}
+.pic-current{
+    width: 50%;
+}
+.profile{
+    width: 50%;
+}
+.name-mrt{
+    width: 100%;
+    height: 33px;
+    margin-bottom: 15px;
+
+}
+.catagory-mrt{
+    width: 100%;
+    height: 22px;
+}
+.booking-form{
+    width: 100%;
+    height: 302px;
+    background-color: #E8E8E8;
+    border-radius: 5px;
+    padding:  20px;
+}
+.booking-input{
+    width: 193px;
+    height: 35px;
+}
+.booking-btn{
+    width: 154px;
+    height: 36px;
+    padding: 10px 20px ;
+    border-radius: 5px ;
+    background-color: #448899;
+    color: #FFFFFF;
+    border: 0;
+    text-align: center;
+}
+.booking-form > *{
+    margin-bottom: 15px;
+}
