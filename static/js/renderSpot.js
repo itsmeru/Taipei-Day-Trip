@@ -2,7 +2,7 @@ function showSpot(name,mrt_station,catego,first_img,id){
     let attractions = document.querySelector(".attractions");
     let attractions_group = document.createElement("div");
     attractions_group.classList.add("attractions-group");
-    attractions_group.onclick = function(){spotPage(id);};
+    attractions_group.onclick = function(){window.location.href = `/attraction/${id}`;};
 
     let container_img = document.createElement("div");
     container_img.classList.add("container-img");

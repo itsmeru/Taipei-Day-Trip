@@ -128,8 +128,6 @@ venv.bak/
 .dmypy.json
 dmypy.json
 main.py
-spot.py
-spot.sql
 
 # Pyre type checker
 .pyre/

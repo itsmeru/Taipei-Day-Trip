@@ -17,7 +17,7 @@ nav{
   height: 54px;
   position: fixed;
   background-color: white;
-  z-index: 1; 
+  z-index: 2; 
 }
 .nav-title {
   max-width: 1200px;
@@ -396,7 +396,7 @@ button img {
   align-items: center;
   background-color: #757575;
   color: #FFFFFF;
-  ;
+  
 }
 
 @media (min-width: 601px) and (max-width: 1200px){

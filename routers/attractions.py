@@ -15,29 +15,17 @@ async def attractions(request: Request, page: int = Query(0, description="要取
             results = cursor.fetchall()
             total_num = len(results)
             total_page = total_num / 12
-            cursor.execute("SELECT spots.*, imgs.imgs FROM spots JOIN (SELECT img_id, GROUP_CONCAT(img_url) AS imgs FROM spot_imgs GROUP BY img_id) AS imgs ON spots.id = imgs.img_id WHERE (spots.MRT = %s OR spots.name LIKE %s) LIMIT %s,%s", (keyword, '%' + keyword + '%', start_index, items_per_page))
+            cursor.execute("SELECT spots.*, imgs.images FROM spots JOIN (SELECT img_id, GROUP_CONCAT(img_url) AS images FROM spot_imgs GROUP BY img_id) AS imgs ON spots.id = imgs.img_id WHERE (spots.MRT = %s OR spots.name LIKE %s) LIMIT %s,%s", (keyword, '%' + keyword + '%', start_index, items_per_page))
             results = cursor.fetchall()
             if not results:
                 data = {"error": True, "message": "找不到對應的資料"}
                 return JSONResponse(status_code=404, content=data, media_type="application/json")
-    
-    attractions = []
+    attraction = []
     for result in results:
-        image_urls = result["imgs"].split(',') if result["imgs"] else []
-        attraction = {
-            "id": result["id"],
-            "name": result["name"],
-            "category": result["category"],
-            "description": result["description"],
-            "address": result["address"],
-            "transport": result["transpot"],
-            "mrt": result["MRT"],
-            "lat": result["lat"],
-            "lng": result["lng"],
-            "images": image_urls
-        }
-        attractions.append(attraction)
-  
+        image_urls = result["images"].split(",") if result["images"] else []
+        attraction_copy = result.copy()
+        attraction_copy ["images"] = image_urls
+        attraction.append(attraction_copy )
     next_page = page + 1 if page + 1 < total_page else None
-    data = {"nextPage": next_page, "data": attractions}
+    data = {"nextPage": next_page, "data": attraction}
     return JSONResponse(content=data, media_type="application/json")

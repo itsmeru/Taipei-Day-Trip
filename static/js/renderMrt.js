@@ -12,7 +12,7 @@ function showMrt(address){
   }
 
 
-    // 處理滑動視窗
+    
     let leftButton = document.querySelector(".left-container button");
     let rightButton = document.querySelector(".right-container button");
 

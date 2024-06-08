@@ -24,7 +24,7 @@ async function getSpot(address="") {
     for (let i = 0; i < data["data"].length; i++) {
         let attraction = data["data"][i];
         let first_img = attraction["images"][0];
-        showSpot(attraction["name"], attraction["mrt"], attraction["category"],first_img,attraction["id"]);
+        showSpot(attraction["name"], attraction["MRT"], attraction["category"],first_img,attraction["id"]);
     }
     if (next_page !== null) {
         observer.observe(document.querySelector(".down")); 

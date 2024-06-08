@@ -6,14 +6,15 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="static/css/reset.css" />
+  <link rel="stylesheet" type="text/css" href="/static/css/reset.css" />
   <link rel="stylesheet" type="text/css" href="/static/css/font_var.css" />
   <link rel="stylesheet" type="text/css" href="/static/css/color_var.css" />
   <link rel="stylesheet" type="text/css" href="/static/css/index.css" />
   <link rel="stylesheet" type="text/css" href="/static/css/attraction.css" />
   <script src="/static/js/spotPage.js" defer></script>
   <script src="/static/js/dialog.js" defer></script>
-
+  <script src="/static/js/renderInfo.js" defer></script>
+  <script src="/static/js/showPic.js" defer></script>
   <title>Attraction</title>
 </head>
 <body>
@@ -48,7 +49,7 @@
   </dialog>
   <nav>
     <div class="nav-title">
-      <a href="#" class="headline">台北一日遊</a>
+      <a href="/" class="headline">台北一日遊</a>
       <div class="frame2">
         <div class="frame1">
           <button class="nav-btn body font-medium">預定行程</button>
@@ -60,35 +61,44 @@
   <hr/>
   <section>
     <div class="pic-current">
-      <img src="/static/pic/cat.jpg">
+     <div class="slider"></div>
+    <button class="prev" onclick="prevSlide()">
+      <img src="/static/pic/leftbtn.png">
+    </button>
+    <button class="next" onclick="nextSlide()">
+      <img src="/static/pic/rightbtn.png">
+    </button>
     </div>
     <div class="profile">
-      <div class="name-mrt dialog-title font-bold">平安鐘</div>
-      <div class="catagory-mrt">公共藝術at忠孝復興</div>
       <form  class="booking-form">
         <div class="body font-bold">訂購導覽行程</div>
-        <div class="body font-medium">以此景點為中心的一日行程，帶您探索城市角落故事</div>
+        <div class="body font-regular">以此景點為中心的一日行程，帶您探索城市角落故事</div>
         <div><label for="date" class="body font-bold">選擇日期: </label>
           <input type="date" name="date" class="booking-input"></div>
-        <div>
+        <div class="radio-container">
           <label class="body font-bold">選擇時間:</label>
-          <input type="radio" id="morning" name="halfday" value="morning" checked>
+          <input type="radio"  id="morning" class="custom-radio" name="halfday" value="morning" checked>
           <label for="morning">上半天</label>
-          <input type="radio" id="afternoon" name="halfday" value="afternoon">
+          <input type="radio" id="afternoon" class="custom-radio" name="halfday" value="afternoon">
           <label for="afternoon">下半天</label>
         </div>
-        <div class="body font-bold">導覽費用: <span class="body font-medium">新台幣2000元</span></div>
+        <div class="body font-bold">導覽費用: <span class="money body font-regular"> 新台幣2000元</span></div>
         <button class="btn font-regular booking-btn">開始預約行程</button>
       </form>
     </div>
-   
   </section>
   <hr/>
-
-  <main></main>
+  <div class="infos">
+    <div class="body font-bold">景點地址 :</div>
+    <div class="transport body font-bold">交通方式 :</div>
+  </div>
   <footer class="down body font-bold">COPYRIGHT © 2021 台北一日遊</footer>
 
 </body>
 <script>
+   let pathname = window.location.pathname;
+   let parts = pathname.split('/');
+   let id = parts[parts.length - 1];
+    window.onload = function() {spotPage(id);};
 </script>
 </html>
