@@ -142,6 +142,7 @@ section{
     margin-left: 5px;
     border: 0;
     padding: 5px 10px;
+    background-color: #FFFFFF;
 }
 .radio-container{
     display: flex;
