@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI,Request
 from fastapi.staticfiles import StaticFiles
 from routers import attractions, mrts, static_pages, spot
 from database import create_db_pool

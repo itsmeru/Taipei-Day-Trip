@@ -20,12 +20,9 @@ async def attractions(request: Request, page: int = Query(0, description="要取
             if not results:
                 data = {"error": True, "message": "找不到對應的資料"}
                 return JSONResponse(status_code=404, content=data, media_type="application/json")
-    attraction = []
     for result in results:
         image_urls = result["images"].split(",") if result["images"] else []
-        attraction_copy = result.copy()
-        attraction_copy ["images"] = image_urls
-        attraction.append(attraction_copy )
+        result ["images"] = image_urls
     next_page = page + 1 if page + 1 < total_page else None
-    data = {"nextPage": next_page, "data": attraction}
+    data = {"nextPage": next_page, "data": results}
     return JSONResponse(content=data, media_type="application/json")

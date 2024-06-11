@@ -3,7 +3,7 @@ async function getMrt(){
     .then(data=>{
       for(let i= 0;i< data["data"].length;i++){
         let address = data["data"][i];
-        if(address!=null){
+        if(address){
           showMrt(address);
         }
       }

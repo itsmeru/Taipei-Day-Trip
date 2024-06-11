@@ -50,6 +50,6 @@ async function getSpot(address="") {
     });
 
 document.addEventListener("DOMContentLoaded", function() {
-getSpot(); 
+    getSpot(); 
 observer.observe(document.querySelector(".down")); 
 });

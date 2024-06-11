@@ -17,9 +17,9 @@ function showMrt(address){
     let rightButton = document.querySelector(".right-container button");
 
     leftButton.addEventListener("click", function() {
-      list_container.scrollBy({ left: -400, behavior: "smooth" });
+      list_container.scrollBy({ left: -300, behavior: "smooth" });
     });
 
     rightButton.addEventListener("click", function() {
-      list_container.scrollBy({ left: 400, behavior: "smooth" });
+      list_container.scrollBy({ left: 300, behavior: "smooth" });
     });

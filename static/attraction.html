@@ -68,6 +68,7 @@
     <button class="next" onclick="nextSlide()">
       <img src="/static/pic/rightbtn.png">
     </button>
+    <div class="dots-container"></div>
     </div>
     <div class="profile">
       <form  class="booking-form">
@@ -76,13 +77,13 @@
         <div><label for="date" class="body font-bold">選擇日期: </label>
           <input type="date" name="date" class="booking-input"></div>
         <div class="radio-container">
-          <label class="body font-bold">選擇時間:</label>
+          <c class="body font-bold">選擇時間:</label>
           <input type="radio"  id="morning" class="custom-radio" name="halfday" value="morning" checked>
           <label for="morning">上半天</label>
           <input type="radio" id="afternoon" class="custom-radio" name="halfday" value="afternoon">
           <label for="afternoon">下半天</label>
         </div>
-        <div class="body font-bold">導覽費用: <span class="money body font-regular"> 新台幣2000元</span></div>
+        <div class="body font-bold">導覽費用: <span class="money body font-regular" id="tour-cost"></span></div>
         <button class="btn font-regular booking-btn">開始預約行程</button>
       </form>
     </div>
@@ -100,5 +101,6 @@
    let parts = pathname.split('/');
    let id = parts[parts.length - 1];
     window.onload = function() {spotPage(id);};
+    
 </script>
 </html>
