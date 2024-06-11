@@ -11,7 +11,7 @@
   <link rel="stylesheet" type="text/css" href="/static/css/color_var.css" />
   <link rel="stylesheet" type="text/css" href="/static/css/index.css" />
   <link rel="stylesheet" type="text/css" href="/static/css/attraction.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
   <script src="/static/js/spotPage.js" defer></script>
   <script src="/static/js/dialog.js" defer></script>
   <script src="/static/js/renderInfo.js" defer></script>
@@ -97,14 +97,16 @@
   <footer class="down body font-bold">COPYRIGHT © 2021 台北一日遊</footer>
 
 </body>
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script>
 <script>
+   let picker = new Pikaday({
+            field: document.getElementById("date"),
+            format: 'YYYY-MM-DD'
+        });
    let pathname = window.location.pathname;
    let parts = pathname.split('/');
    let id = parts[parts.length - 1];
     window.onload = function() {spotPage(id);};
-    flatpickr("#date", {
-              dateFormat: "Y-m-d"
-        });
+   
 </script>
 </html>
