@@ -142,11 +142,16 @@ section{
     margin-left: 5px;
     border: 0;
     padding: 5px 10px;
-    background-color: #FFFFFF;
+    background-image: url(/static/pic/date.png);
+    background-repeat: no-repeat;
+    background-position: right 5px center;
+    background-size: 24px 24px;
+    object-fit: cover;
 }
-.booking-input::placeholder {
-    all: inherit; 
+::-webkit-calendar-picker-indicator{
+    background: none;
 }
+
 .radio-container{
     display: flex;
     align-items: center;
