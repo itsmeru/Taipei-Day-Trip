@@ -11,6 +11,7 @@
   <link rel="stylesheet" type="text/css" href="/static/css/color_var.css" />
   <link rel="stylesheet" type="text/css" href="/static/css/index.css" />
   <link rel="stylesheet" type="text/css" href="/static/css/attraction.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <script src="/static/js/spotPage.js" defer></script>
   <script src="/static/js/dialog.js" defer></script>
   <script src="/static/js/renderInfo.js" defer></script>
@@ -77,7 +78,7 @@
         <div><label for="date" class="body font-bold">選擇日期: </label>
           <input type="date" name="date" class="booking-input"></div>
         <div class="radio-container">
-          <c class="body font-bold">選擇時間:</label>
+          <label class="body font-bold">選擇時間:</label>
           <input type="radio"  id="morning" class="custom-radio" name="halfday" value="morning" checked>
           <label for="morning">上半天</label>
           <input type="radio" id="afternoon" class="custom-radio" name="halfday" value="afternoon">
@@ -96,11 +97,14 @@
   <footer class="down body font-bold">COPYRIGHT © 2021 台北一日遊</footer>
 
 </body>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
    let pathname = window.location.pathname;
    let parts = pathname.split('/');
    let id = parts[parts.length - 1];
     window.onload = function() {spotPage(id);};
-    
+    flatpickr("#date", {
+              dateFormat: "Y-m-d"
+        });
 </script>
 </html>
