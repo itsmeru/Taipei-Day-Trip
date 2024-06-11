@@ -1,10 +1,10 @@
 import os
 import mysql.connector.pooling
 
-def create_db_pool():
+def create_db_pool(db):
     dbconfig = {
-        "database": "spot",
+        "database": db,
         "user": "root",
         "password": os.environ['MYSQL_PASSWORD']
     }
-    return mysql.connector.pooling.MySQLConnectionPool(pool_name="mypool", pool_size=5, **dbconfig)
+    return mysql.connector.pooling.MySQLConnectionPool(pool_name="mypool", pool_size=10, **dbconfig)

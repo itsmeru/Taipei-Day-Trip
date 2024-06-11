@@ -6,7 +6,7 @@ router = APIRouter()
 @router.get("/api/mrts")
 async def get_mrt(request: Request):
     try:
-        db_pool = request.state.db_pool
+        db_pool = request.state.db_pool.get("spot")
         with db_pool.get_connection() as con:
             with con.cursor() as cursor:
                 cursor.execute("SELECT MRT, COUNT(MRT) AS count FROM spots GROUP BY MRT ORDER BY count DESC")

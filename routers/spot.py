@@ -3,6 +3,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 router = APIRouter()
 app = FastAPI()
+
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
     data = {"error": True, "message": "輸入錯誤"}
@@ -10,7 +11,7 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 @router.get("/api/attraction/{attractionId}")
 async def attraction_spot(request: Request, attractionId: int):
     try:
-        db_pool = request.state.db_pool
+        db_pool = request.state.db_pool.get("spot")
         with db_pool.get_connection() as con:
             with con.cursor(dictionary=True) as cursor:
                 cursor.execute("SELECT id FROM spots WHERE id = %s", (attractionId,))
