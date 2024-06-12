@@ -20,7 +20,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 db_pool ={
     "spot":create_db_pool("spot"),
-    "member":create_db_pool("member"),
+    # "member":create_db_pool("member"),
 }
 @app.middleware("http")
 async def attach_db_connection(request, call_next):
