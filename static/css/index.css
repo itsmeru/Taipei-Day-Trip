@@ -8,7 +8,6 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: relative;
 }
 
 nav{
@@ -18,7 +17,7 @@ nav{
   height: 54px;
   position: fixed;
   background-color: white;
-  z-index: 1; 
+  z-index: 2; 
 }
 .nav-title {
   max-width: 1200px;
@@ -49,7 +48,6 @@ nav{
   border : 0;
   cursor: pointer;
   color: #666666;
-
 }
 
 .welcome{
@@ -70,11 +68,12 @@ dialog{
   width: 340px;
   border: 0;
   padding: 0;
+  margin: 0;
   border-radius: 6px;
-  position: absolute;
-  top: 80px; 
+  position: fixed;
+  top: 80px;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, 0);
 }
 
 .dialog-actions {
@@ -115,22 +114,24 @@ dialog::backdrop {
   width: 310px;
   height: 235px;
   margin: 25px 15px 15px 15px;
-  
+  align-items: center;
 }
 .sign-in-title{
   width: 100%;
   height: 27px;
   color: #666666;
   text-align: center;
+  margin-bottom: 10px;
 }
 .dialog-input{
   width: 310px;
   height: 47px;
-  margin-top: 10px;
-  padding: 10px;
+  margin-bottom: 10px;
+  padding: 15px;
   color: #757575;
   outline: none;
-
+  border-radius: 5px ;
+  border: 1px solid #CCCCCC
 }
 .dialog-button{
   border: none;
@@ -138,11 +139,11 @@ dialog::backdrop {
   height: 47px;
   padding: 10px 20px 10px 20px;
   border-radius: 5px;
-  margin-top: 10px;
   background: #448899;
   cursor: pointer;
   color: #FFFFFF;
-  ;
+  margin-bottom: 10px;
+
 }
 .dialog-form {
   text-decoration: none;
@@ -155,8 +156,7 @@ dialog::backdrop {
   background-color: #FFFFFF;
   cursor: pointer;
   color: #666666;
-  margin-top: 10px;
-
+  /* margin-top: 10px 15px 15px 15px; */
 }
 
 .slogan-search form,
@@ -165,6 +165,7 @@ dialog::backdrop {
   border: none;
 }
 .slogan-container{
+  width: 100%;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -174,9 +175,6 @@ dialog::backdrop {
   display: flex;
   padding: 10px;
   gap: 10px;
-}
-.slogan-container{
-  width: 100%;
 }
 
 .slogan{
@@ -239,7 +237,6 @@ main {
 }
 
 .list-bar {
-  display: none;
   max-width: 1200px; 
   width: 100%;
   height: 70px;
@@ -256,6 +253,15 @@ main {
   background: none;
   border: none;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  opacity: 0.5;
+}
+.left-container button:hover,
+.right-container button:hover {
+  opacity: 1;
 }
 
 .left-container,
@@ -280,16 +286,11 @@ main {
   padding: 13px  10px;
   display: flex;
   overflow-x: auto; 
-  scroll-behavior: smooth;
   align-items: center;
   white-space: nowrap;
 }
 .list-container::-webkit-scrollbar {
   display: none;  
-}
-.container{
-  width: 100%;
-  overflow: clip;
 }
 
 .mrt-name {
@@ -320,27 +321,9 @@ main {
   color:#000000;
 }
 
-.left-container button,
-.right-container button {
-  display: flex;
-  justify-content: center;
-  align-items: center; 
-}
-
-.left-container button,
-.right-container button{
-  padding: 0;
-  opacity: 0.5;
-}
-
 button img {
   width: 32px;
   height: 32px;
-  
-}
-.left-container button:hover,
-.right-container button:hover {
-  opacity: 1;
 }
 
 .attractions{
@@ -359,6 +342,10 @@ button img {
   border: 1px solid #E8E8E8;
   border-radius: 5px;
   overflow: hidden;
+  cursor: pointer;
+}
+.attractions-group:hover{
+  opacity: 0.8;
 }
 .attractions-group:not(div:nth-child(5n+1),div:nth-child(5n+2),div:nth-child(5n+3)){
   flex-direction: column;
@@ -407,7 +394,7 @@ button img {
   align-items: center;
   background-color: #757575;
   color: #FFFFFF;
-  ;
+  
 }
 
 @media (min-width: 601px) and (max-width: 1200px){
@@ -431,9 +418,8 @@ button img {
   }
 
   .welcome{
-    width: 100%;
-    height: 320px;
     background-size: 1920px 320px;
+    background-position: center 54px;
   }
  
   nav, .container-img,.attractions-info{
