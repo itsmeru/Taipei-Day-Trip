@@ -1,0 +1,22 @@
+services:
+  app:
+    image: taipeidaytrip
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      - MYSQL_HOST=mydb
+      - MYSQL_PASSWORD=betty520
+      - JWT_SECRET=ruruisback
+    volumes:
+      - /Users/ruru/Desktop/taipei-day-trip:/user/src/app
+
+  mydb:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "betty520"
+    ports:
+      - "3307:3306"
+    volumes:
+      - /Users/ruru/Desktop/taipei-day-trip-db:/var/lib/mysql

@@ -1,0 +1,6 @@
+passlib
+fastapi
+uvicorn
+mysql-connector-python
+pyjwt
+starlette_session

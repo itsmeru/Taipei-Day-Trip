@@ -11,18 +11,23 @@ async def attractions(request: Request, page: int = Query(0, description="要取
     
     with db_pool.get_connection() as con:
         with con.cursor(dictionary=True) as cursor:
-            cursor.execute("SELECT * FROM spots WHERE MRT = %s OR name LIKE %s", (keyword, '%' + keyword + '%'))
+            cursor.execute("SELECT  COUNT(*)  FROM spots WHERE MRT = %s OR name LIKE %s ", (keyword, '%' + keyword + '%'))
             results = cursor.fetchall()
-            total_num = len(results)
+            total_num = total_num = results[0]["COUNT(*)"]
             total_page = total_num / 12
-            cursor.execute("SELECT spots.*, imgs.images FROM spots JOIN (SELECT img_id, GROUP_CONCAT(img_url) AS images FROM spot_imgs GROUP BY img_id) AS imgs ON spots.id = imgs.img_id WHERE (spots.MRT = %s OR spots.name LIKE %s) LIMIT %s,%s", (keyword, '%' + keyword + '%', start_index, items_per_page))
-            results = cursor.fetchall()
             if not results:
                 data = {"error": True, "message": "找不到對應的資料"}
                 return JSONResponse(status_code=404, content=data, media_type="application/json")
-    for result in results:
-        image_urls = result["images"].split(",") if result["images"] else []
-        result ["images"] = image_urls
+            
+            cursor.execute("SELECT * FROM spots WHERE MRT = %s OR name LIKE %s LIMIT %s,%s", (keyword, '%' + keyword + '%', start_index, items_per_page))
+            results = cursor.fetchall()
+            for result in results:
+                id = result["id"]
+                cursor.execute("SELECT images FROM spot_imgs WHERE img_id = %s", (id,))
+                img_urls = [row["images"] for row in cursor.fetchall()]
+                result["images"] = img_urls
+
+    
     next_page = page + 1 if page + 1 < total_page else None
     data = {"nextPage": next_page, "data": results}
     return JSONResponse(content=data, media_type="application/json")
