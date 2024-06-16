@@ -14,7 +14,7 @@ function showSlide(index) {
   let offset = -currentSlide * 100;
   document.querySelector(".slider").style.transform = `translateX(${offset}%)`;
 
-  dots.forEach((dot) => dot.classList.remove("active"));
+  document.querySelector(".dot.active").classList.remove("active");
   dots[currentSlide].classList.add("active");
 }
 
