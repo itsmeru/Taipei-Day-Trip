@@ -1,19 +1,36 @@
+function removeMessage(dialog, selector) {
+  let messageDiv = dialog.querySelector(selector);
+  if (messageDiv) {
+    messageDiv.remove();
+  }
+}
+
 function openDialog(dialogId) {
-  document.getElementById(dialogId).showModal();
+  let dialog = document.getElementById(dialogId);
+  removeMessage(dialog, ".error-message");
+  removeMessage(dialog, ".msg");
+  dialog.showModal();
 }
 
 function closeDialog(dialogId) {
-  document.getElementById(dialogId).close();
+  let dialog = document.getElementById(dialogId);
+  removeMessage(dialog, ".error-message");
+  removeMessage(dialog, ".msg");
+  dialog.close();
 }
 
 function toggleDialogs(openDialogId) {
   let dialogs = document.querySelectorAll("dialog");
-  dialogs.forEach((dialog) => dialog.close());
-  let dialog = document.getElementById(openDialogId);
-  if (openDialogId === "register-dialog") {
-    dialog.style.height = "332px";
-  } else {
-    dialog.style.height = "275px";
-  }
-  dialog.showModal();
+  dialogs.forEach((dialog) => {
+    removeMessage(dialog, ".error-message");
+    removeMessage(dialog, ".msg");
+    dialog.close();
+  });
+  openDialog(openDialogId);
+}
+
+
+function clearMessage(form) {
+  removeMessage(form, ".error-message");
+  removeMessage(form, ".msg");
 }

@@ -84,6 +84,11 @@ dialog{
   height: 30px;
 
 }
+.msg,.error-message{
+  text-align: center;
+  color: red;
+  padding: 10px;
+}
 .dialog-actions button{
   border: none;
   background-color: #FFFFFF;
@@ -112,7 +117,6 @@ dialog::backdrop {
 }
 .sign-in{
   width: 310px;
-  height: 235px;
   margin: 25px 15px 15px 15px;
   align-items: center;
 }

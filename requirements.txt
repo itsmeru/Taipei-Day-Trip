@@ -4,3 +4,5 @@ uvicorn
 mysql-connector-python
 pyjwt
 starlette_session
+pydantic[email]
+email-validator

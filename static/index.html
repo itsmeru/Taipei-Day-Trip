@@ -21,31 +21,32 @@
   <title>Home Page</title>
 </head>
 <body>
-  <dialog id="login-dialog">
+  <dialog id="register-dialog">
     <div class="sign-in">
-      <div class="sign-in-title dialog-title font-bold">登入會員帳號</div>
-      <form class="dialog-form" onsubmit="signIn(this);return false;">
-        <input type="text" class="dialog-input body font-medium" name="email" placeholder="輸入電子信箱">
-        <input type="password" class="dialog-input body font-medium" name="password" placeholder="輸入密碼">
-        <button type="submit" class="dialog-button  btn font-regular">登入帳戶</button>
-        <button class="sign-button" onclick="toggleDialogs('register-dialog');return false;">還沒有註冊？點此註冊</button>
+      <div class="sign-in-title dialog-title font-bold">註冊會員帳號</div>
+      <form class="dialog-form" onsubmit="signUp(event, this); return false;">
+        <input type="text" class="dialog-input body font-medium" name="name" id="name" placeholder="輸入姓名" required>
+        <input type="email" class="dialog-input body font-medium" name="email" id="email" placeholder="輸入電子信箱" required>
+        <input type="password" class="dialog-input body font-medium" name="password" id="password" placeholder="輸入密碼(至少六位數)" minlength="6" required>
+        <button type="submit" class="dialog-button btn font-regular">註冊新帳戶</button>
+        <button type="button" class="sign-button" onclick="toggleDialogs('login-dialog'); return false;">已經有帳戶了？點此登入</button>
         <div class="dialog-actions">
-          <button onclick="closeDialog('login-dialog');return false;"><img src="/static/pic/x.png"></button>
+          <button type="button" onclick="closeDialog('register-dialog'); return false;"><img src="/static/pic/x.png"></button>
         </div>
       </form>
     </div>
   </dialog>
-  <dialog id="register-dialog">
+  
+  <dialog id="login-dialog">
     <div class="sign-in">
-      <div class="sign-in-title dialog-title font-bold">註冊會員帳號</div>
-      <form class="dialog-form" onsubmit="signUp(this);return false;">
-        <input type="text" class="dialog-input body font-medium" name="name" placeholder="輸入姓名">
-        <input type="text" class="dialog-input body font-medium" name="email" placeholder="輸入電子信箱">
-        <input type="password" class="dialog-input body font-medium" name="password" placeholder="輸入密碼">
-        <button type="submit" class="dialog-button  btn font-regular">註冊新帳戶</button>
-        <button class="sign-button" onclick="toggleDialogs('login-dialog');return false;">已經有帳戶了？點此登入</button>
+      <div class="sign-in-title dialog-title font-bold">登入帳號</div>
+      <form class="dialog-form" onsubmit="signIn(event, this); return false;">
+        <input type="email" class="dialog-input body font-medium" name="email" id="login-email" placeholder="輸入電子信箱" required>
+        <input type="password" class="dialog-input body font-medium" name="password" id="login-password" placeholder="輸入密碼" minlength="6" required>
+        <button type="submit" id="sigin-btn" class="dialog-button btn font-regular">登入</button>
+        <button type="button" class="sign-button" onclick="toggleDialogs('register-dialog'); return false;">還沒有帳戶？點此註冊</button>
         <div class="dialog-actions">
-          <button onclick="closeDialog('register-dialog');return false;"><img src="/static/pic/x.png"></button>
+          <button type="button" onclick="closeDialog('login-dialog'); return false;"><img src="/static/pic/x.png"></button>
         </div>
       </form>
     </div>
@@ -56,7 +57,7 @@
       <div class="frame2">
         <div class="frame1">
           <button class="nav-btn body font-medium">預定行程</button>
-          <button class="nav-btn body font-medium " onclick="openDialog('login-dialog')">登入/註冊</button> 
+          <button class="nav-btn body font-medium " id="toggle-btn" onclick="openDialog('login-dialog')">登入/註冊</button> 
         </div>  
       </div>
     </div>

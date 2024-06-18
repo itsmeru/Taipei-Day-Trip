@@ -6,10 +6,13 @@ function showSlide(index) {
 
   if (index >= slides.length) {
     currentSlide = 0;
+
   } else if (index < 0) {
     currentSlide = slides.length - 1;
+
   } else {
     currentSlide = index;
+
   }
   let offset = -currentSlide * 100;
   document.querySelector(".slider").style.transform = `translateX(${offset}%)`;
