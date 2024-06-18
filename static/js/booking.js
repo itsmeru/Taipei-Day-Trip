@@ -6,4 +6,6 @@ function booking(form) {
   console.log("Date:", date);
   console.log("Half Day:", halfday);
   console.log("Cost:", cost);
+  window.location.href = "/booking";
+
 }

@@ -1,4 +1,21 @@
-document.addEventListener("DOMContentLoaded",toggleLogoutButton);
+document.addEventListener("DOMContentLoaded",()=>{
+  let token = localStorage.getItem("authToken");
+  if (token){
+    fetch("/api/user/auth",{
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`,  
+        "Content-Type": "application/json"
+      }
+    }).then((res)=>res.json())
+      .then((result)=>{
+        if (result.data !== "None"){
+          toggleLogoutButton();
+        }
+      })
+  }
+ 
+});
 
 
 async function signUp(event, form) {
