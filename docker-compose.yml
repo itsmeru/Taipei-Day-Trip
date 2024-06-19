@@ -8,6 +8,7 @@ services:
       - MYSQL_HOST=mydb
       - MYSQL_PASSWORD=betty520
       - JWT_SECRET=ruruisback
+      - ALGORITHM=HS256
     volumes:
       # - /Users/ruru/Desktop/taipei-day-trip:/user/src/app
       - /home/ubuntu/Stage-2-Task/app.py:/app/app.py
