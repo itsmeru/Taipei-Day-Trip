@@ -40,6 +40,9 @@ nav{
   display: flex;
   align-items: center;
 }
+button.hidden{
+  display: none;
+}
 .nav-btn {
   display: flex;
   justify-content: space-between;
@@ -137,6 +140,7 @@ dialog::backdrop {
   border-radius: 5px ;
   border: 1px solid #CCCCCC
 }
+
 .dialog-button{
   border: none;
   width: 310px;

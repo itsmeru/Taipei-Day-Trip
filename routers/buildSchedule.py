@@ -5,11 +5,11 @@ from pydantic import BaseModel
 router = APIRouter()
 
 class Booking(BaseModel):
-    user_id :int = 1
-    attraction_id: int = 1
-    date: str = "2024-06-12"
-    time: str = "morning"
-    price: int = 2000
+    user_id :int 
+    attraction_id: int
+    date: str 
+    time: str 
+    price: int 
 @router.post("/api/booking")
 async def booking(request:Request,book:Booking):
     user_id = book.user_id

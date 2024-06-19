@@ -19,6 +19,7 @@ async function spotPage(id) {
         data["transpot"],
         data["images"]
       );
+      return data;
     })
     .catch((err) => {
       console.log(err.message);

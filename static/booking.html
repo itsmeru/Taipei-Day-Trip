@@ -11,9 +11,12 @@
   <link rel="stylesheet" type="text/css" href="/static/css/color_var.css" />
   <link rel="stylesheet" type="text/css" href="/static/css/index.css" />
   <link rel="stylesheet" type="text/css" href="/static/css/attraction.css" />
+  <link rel="stylesheet" type="text/css" href="/static/css/booking.css" />
+
   <script src="/static/js/account.js" defer></script>
   <script src="/static/js/spotPage.js" defer></script>
   <script src="/static/js/dialog.js" defer></script>
+  <script src="/static/js/bookInfo.js" defer></script>
 
   <title>Booking</title>
 </head>
@@ -54,12 +57,58 @@
       <div class="frame2">
         <div class="frame1">
           <button class="nav-btn body font-medium">預定行程</button>
-          <button class="nav-btn body font-medium " id="toggle-btn" onclick="openDialog('login-dialog')">登入/註冊</button> 
-        </div>  
+          <button class="hidden nav-btn body font-medium " id="login-btn" onclick="openDialog('login-dialog')">登入/註冊</button> 
+          <button class="hidden nav-btn body font-medium " id="logout-btn" onclick="logout()">登出系統</button>         </div>  
       </div>
     </div>
   </nav>
   <hr/>
+  <div class="headline">headline</div>
+  <section>
+      <div class="image">
+          <img src="https://via.placeholder.com/150" alt="Image">
+      </div>
+      <div class="text">
+          <p>This is some text that describes the image. You can add more content here to provide detailed information.</p>
+      </div>
+  </section>
+  <hr>
+  <div class="form-section">
+    <h2>您的聯絡資訊</h2>
+    <div class="form-row">
+        <label for="name">聯絡姓名:</label>
+        <input type="text"  name="name">
+    </div>
+    <div class="form-row">
+        <label for="email">聯絡信箱:</label>
+        <input type="text"  name="email">
+    </div>
+    <div class="form-row">
+        <label for="phone">手機號碼:</label>
+        <input type="text" id="phone" name="phone">
+    </div>
+    <div class="info">請保持手機暢通，準時到達，導覽人員將用手機與您聯繫，務必留下正確的聯絡方式。</div>
+</div>
+
+  <div class="form-section">
+      <h2>信用卡付款資訊</h2>
+      <div class="form-row">
+          <label for="cardNumber">卡片號碼:</label>
+          <input type="text" id="cardNumber" name="cardNumber">
+      </div>
+      <div class="form-row">
+          <label for="expiryDate">過期時間:</label>
+          <input type="text" id="expiryDate" name="expiryDate">
+      </div>
+      <div class="form-row">
+          <label for="cvv">驗證密碼:</label>
+          <input type="text" id="cvv" name="cvv">
+      </div>
+  </div>
+
+  <div class="total-price">總價:新台幣2000元</div>
+
+  <button>確認訂購並付款</button>
   
 </body>
 </html>

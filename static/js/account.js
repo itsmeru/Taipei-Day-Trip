@@ -1,20 +1,24 @@
-document.addEventListener("DOMContentLoaded",()=>{
-  let token = localStorage.getItem("authToken");
-  if (token){
-    fetch("/api/user/auth",{
-      method: "GET",
-      headers: {
-        "Authorization": `Bearer ${token}`,  
-        "Content-Type": "application/json"
-      }
-    }).then((res)=>res.json())
-      .then((result)=>{
-        if (result.data !== "None"){
-          toggleLogoutButton();
+document.addEventListener("DOMContentLoaded", async () => {
+  let loginBtn = document.getElementById("login-btn");
+  let logoutBtn = document.getElementById("logout-btn");
+    let token = localStorage.getItem("authToken");
+    if (token) {
+        let res = await fetch("/api/user/auth", {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+          }
+        });
+        let result = await res.json();
+        if (result.data !== "None") {
+          logoutBtn.classList.remove("hidden");
+        }else{
+          loginBtn.classList.remove("hidden");
         }
-      })
-  }
- 
+    } else{
+      loginBtn.classList.remove("hidden");
+    }
 });
 
 
@@ -29,8 +33,8 @@ async function signIn(event, form) {
   await handleForm(event,form,"/api/user/auth","PUT",(result)=>{
     localStorage.setItem("authToken",result.token);
     closeDialog("login-dialog");
-    toggleLogoutButton();
     form.reset();
+    window.location.reload();
   })
 }
 
@@ -73,20 +77,7 @@ async function showMessage(form, message, className, color){
 
 
 
-function toggleLogoutButton() {
-  let nav_button = document.querySelector("#toggle-btn");
-  if (localStorage.getItem("authToken")) {
-    nav_button.textContent = "登出系統";
-    nav_button.onclick = logout;
-  } else {
-    nav_button.textContent = "登入/註冊";
-    nav_button.onclick = function() {
-      openDialog("login-dialog");
-    };
-  }
-}
 async function logout() {
   localStorage.removeItem("authToken");
-  toggleLogoutButton();
+  window.location.reload();
 };
-

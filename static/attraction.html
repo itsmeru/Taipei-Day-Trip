@@ -36,7 +36,7 @@
       </form>
     </div>
   </dialog>
-  
+  ß
   <dialog id="login-dialog">
     <div class="sign-in">
       <div class="sign-in-title dialog-title font-bold">登入帳號</div>
@@ -57,7 +57,8 @@
       <div class="frame2">
         <div class="frame1">
           <button class="nav-btn body font-medium">預定行程</button>
-          <button class="nav-btn body font-medium " id="toggle-btn" onclick="openDialog('login-dialog')">登入/註冊</button> 
+          <button class="hidden nav-btn body font-medium" id="login-btn" onclick="openDialog('login-dialog')">登入/註冊</button> 
+          <button class="hidden nav-btn body font-medium" id="logout-btn" onclick="logout()">登出系統</button> 
         </div>  
       </div>
     </div>
@@ -75,7 +76,7 @@
     <div class="dots-container"></div>
     </div>
     <div class="profile">
-      <form  class="booking-form" onsubmit="booking(this);return false;">
+      <form  class="booking-form" onsubmit="booking(this,getId());return false;">
         <div class="body font-bold">訂購導覽行程</div>
         <div class="body font-regular">以此景點為中心的一日行程，帶您探索城市角落故事</div>
         <div><label for="date" class="body font-bold">選擇日期: </label>
@@ -105,6 +106,9 @@
    let pathname = window.location.pathname;
    let parts = pathname.split('/');
    let id = parts[parts.length - 1];
+   function getId(){
+    return id;
+   }
     window.onload = function() {spotPage(id);};
    
 </script>
