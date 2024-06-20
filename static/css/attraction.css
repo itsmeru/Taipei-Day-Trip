@@ -1,5 +1,4 @@
 hr{
-    max-width: 1200px;
     width: 100%;
     margin: 0;
     line-height: 0;
@@ -8,6 +7,9 @@ hr{
 hr:first-of-type{
     width: 100vw;
     margin-top: 3.375rem;
+}
+hr:nth-of-type(2) {
+    max-width: 1200px;
 }
 
 
@@ -24,6 +26,7 @@ section{
 
 .pic-current{
     flex: 9;
+    height: 400px;
     position: relative;
     overflow: hidden;
     border-radius: 5px;
@@ -252,7 +255,8 @@ input[type=date]:invalid::-webkit-calendar-picker-indicator{
     .pic-current,
     .slider img,
     .slider{
-        width: 100vw;
+        width: 100dvw;
+        height: 350px;
     }
 
 

@@ -11,38 +11,42 @@
   <link rel="stylesheet" type="text/css" href="/static/css/color_var.css" />
   <link rel="stylesheet" type="text/css" href="/static/css/index.css" />
   <link rel="stylesheet" type="text/css" href="/static/css/attraction.css" />
+  <script src="/static/js/account.js" defer></script>
   <script src="/static/js/spotPage.js" defer></script>
   <script src="/static/js/dialog.js" defer></script>
   <script src="/static/js/renderInfo.js" defer></script>
   <script src="/static/js/showPic.js" defer></script>
+  <script src="/static/js/booking.js" defer></script>
+
   <title>Attraction</title>
 </head>
 <body>
-  <dialog id="login-dialog">
+  <dialog id="register-dialog">
     <div class="sign-in">
-      <div class="sign-in-title dialog-title font-bold">登入會員帳號</div>
-      <form method="dialog" class="dialog-form">
-        <input type="text" class="dialog-input body font-medium" name="email" placeholder="輸入電子信箱">
-        <input type="text" class="dialog-input body font-medium" name="password" placeholder="輸入密碼">
-        <button class="dialog-button  btn font-regular">登入帳戶</button>
-        <button class="sign-button" onclick="toggleDialogs('register-dialog')">還沒有註冊？點此註冊</button>
+      <div class="sign-in-title dialog-title font-bold">註冊會員帳號</div>
+      <form class="dialog-form" onsubmit="signUp(event, this); return false;">
+        <input type="text" class="dialog-input body font-medium" name="name" id="name" placeholder="輸入姓名" required>
+        <input type="email" class="dialog-input body font-medium" name="email" id="email" placeholder="輸入電子信箱" required>
+        <input type="password" class="dialog-input body font-medium" name="password" id="password" placeholder="輸入密碼(至少六位數)" minlength="6" required>
+        <button type="submit" class="dialog-button btn font-regular">註冊新帳戶</button>
+        <button type="button" class="sign-button" onclick="toggleDialogs('login-dialog'); return false;">已經有帳戶了？點此登入</button>
         <div class="dialog-actions">
-          <button onclick="closeDialog('login-dialog')"><img src="/static/pic/x.png"></button>
+          <button type="button" onclick="closeDialog('register-dialog'); return false;"><img src="/static/pic/x.png"></button>
         </div>
       </form>
     </div>
   </dialog>
-  <dialog id="register-dialog">
+  ß
+  <dialog id="login-dialog">
     <div class="sign-in">
-      <div class="sign-in-title dialog-title font-bold">註冊會員帳號</div>
-      <form method="dialog" class="dialog-form">
-        <input type="text" class="dialog-input body font-medium" name="name" placeholder="輸入姓名">
-        <input type="text" class="dialog-input body font-medium" name="email" placeholder="輸入電子信箱">
-        <input type="text" class="dialog-input body font-medium" name="password" placeholder="輸入密碼">
-        <button class="dialog-button  btn font-regular">註冊新帳戶</button>
-        <button class="sign-button" onclick="toggleDialogs('login-dialog')">已經有帳戶了？點此登入</button>
+      <div class="sign-in-title dialog-title font-bold">登入帳號</div>
+      <form class="dialog-form" onsubmit="signIn(event, this); return false;">
+        <input type="email" class="dialog-input body font-medium" name="email" id="login-email" placeholder="輸入電子信箱" required>
+        <input type="password" class="dialog-input body font-medium" name="password" id="login-password" placeholder="輸入密碼" minlength="6" required>
+        <button type="submit" id="sigin-btn" class="dialog-button btn font-regular">登入</button>
+        <button type="button" class="sign-button" onclick="toggleDialogs('register-dialog'); return false;">還沒有帳戶？點此註冊</button>
         <div class="dialog-actions">
-          <button onclick="closeDialog('register-dialog')"><img src="/static/pic/x.png"></button>
+          <button type="button" onclick="closeDialog('login-dialog'); return false;"><img src="/static/pic/x.png"></button>
         </div>
       </form>
     </div>
@@ -53,7 +57,8 @@
       <div class="frame2">
         <div class="frame1">
           <button class="nav-btn body font-medium">預定行程</button>
-          <button class="nav-btn body font-medium " onclick="openDialog('login-dialog')">登入/註冊</button> 
+          <button class="hidden nav-btn body font-medium" id="login-btn" onclick="openDialog('login-dialog')">登入/註冊</button> 
+          <button class="hidden nav-btn body font-medium" id="logout-btn" onclick="logout()">登出系統</button> 
         </div>  
       </div>
     </div>
@@ -71,11 +76,11 @@
     <div class="dots-container"></div>
     </div>
     <div class="profile">
-      <form  class="booking-form">
+      <form  class="booking-form" onsubmit="booking(this,getId());return false;">
         <div class="body font-bold">訂購導覽行程</div>
         <div class="body font-regular">以此景點為中心的一日行程，帶您探索城市角落故事</div>
         <div><label for="date" class="body font-bold">選擇日期: </label>
-          <input type="date" name="date" id="date"  class="body font-medium booking-input"></div>
+          <input type="date" name="date" id="date" required class="body font-medium booking-input"></div>
         <div class="radio-container">
           <label class="body font-bold">選擇時間:</label>
           <input type="radio"  id="morning" class="custom-radio" name="halfday" value="morning" checked>
@@ -84,7 +89,7 @@
           <label for="afternoon">下半天</label>
         </div>
         <div class="body font-bold">導覽費用: <span class="money body font-regular" id="tour-cost"></span></div>
-        <button class="btn font-regular booking-btn">開始預約行程</button>
+        <button type="submit" class="btn font-regular booking-btn">開始預約行程</button>
       </form>
     </div>
   </section>
@@ -101,6 +106,9 @@
    let pathname = window.location.pathname;
    let parts = pathname.split('/');
    let id = parts[parts.length - 1];
+   function getId(){
+    return id;
+   }
     window.onload = function() {spotPage(id);};
    
 </script>
