@@ -1,12 +1,11 @@
 import jwt
 def getUser(authorization, jwt_secret, algo):
-    if authorization is None:
+    token = authorization.split(" ")[1]
+    result = verify_token(token, jwt_secret, algo)
+    if result is None:
         data = {"data":None}
         return data
-    token = authorization.split(" ")[1]
-    id, name, email = verify_token(token, jwt_secret, algo)
-
-    data = {"data":{"id": id, "name": name, "email": email}}
+    data = {"data":{"id": result[0], "name": result[1], "email": result[2]}}
     return data
 def verify_token(token, jwt_secret, algo):
     try:

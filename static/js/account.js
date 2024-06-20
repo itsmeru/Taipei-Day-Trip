@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           }
         });
         let result = await res.json();
-        if (result.data !== "None") {
+        if (result.data !== null) {
           logoutBtn.classList.remove("hidden");
         }else{
           localStorage.removeItem("authToken");
