@@ -14,9 +14,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (result.data !== "None") {
           logoutBtn.classList.remove("hidden");
         }else{
+          localStorage.removeItem("authToken");
           loginBtn.classList.remove("hidden");
         }
     } else{
+      localStorage.removeItem("authToken");
       loginBtn.classList.remove("hidden");
     }
 });
