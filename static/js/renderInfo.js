@@ -4,15 +4,17 @@ let slider = document.querySelector(".slider");
 let infos = document.querySelector(".infos");
 let transports = document.querySelector(".transport");
 let dots_container = document.querySelector(".dots-container");
-function renderInfo(
-  address,
-  category,
-  description,
-  mrt,
-  name,
-  transport,
-  images
-) {
+
+async function renderInfo(id){
+  let data = await spotPage(id);
+  let address = data["address"]
+  let category = data["category"]
+  let description = data["description"]
+  let mrt = data["MRT"]
+  let name = data["name"]
+  let transport = data["transpot"]
+  let images =  data["images"]
+
   let name_mrt = document.createElement("div");
   name_mrt.className = "name-mrt dialog-title font-bold";
   name_mrt.textContent = name;

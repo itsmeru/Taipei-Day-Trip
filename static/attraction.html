@@ -12,11 +12,13 @@
   <link rel="stylesheet" type="text/css" href="/static/css/index.css" />
   <link rel="stylesheet" type="text/css" href="/static/css/attraction.css" />
   <script src="/static/js/account.js" defer></script>
+  <script src="/static/js/renderInfo.js" defer></script>
   <script src="/static/js/spotPage.js" defer></script>
   <script src="/static/js/dialog.js" defer></script>
-  <script src="/static/js/renderInfo.js" defer></script>
   <script src="/static/js/showPic.js" defer></script>
   <script src="/static/js/booking.js" defer></script>
+  <script src="/static/js/bookInfo.js" defer></script>
+  <script src="/static/js/tokenCkeck.js" defer></script>
 
   <title>Attraction</title>
 </head>
@@ -109,7 +111,7 @@
    function getId(){
     return id;
    }
-    window.onload = function() {spotPage(id);};
+    window.onload = function() {renderInfo(id);};
    
 </script>
 </html>

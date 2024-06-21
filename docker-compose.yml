@@ -5,7 +5,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - MYSQL_HOST=mydb
+      - MYSQL_HOST=stage-2-task-mydb-1
       - MYSQL_PASSWORD=betty520
       - JWT_SECRET=ruruisback
       - ALGORITHM=HS256

@@ -1,26 +1,5 @@
 document.addEventListener("DOMContentLoaded", async () => {
-  let loginBtn = document.getElementById("login-btn");
-  let logoutBtn = document.getElementById("logout-btn");
-    let token = localStorage.getItem("authToken");
-    if (token) {
-        let res = await fetch("/api/user/auth", {
-          method: "GET",
-          headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json"
-          }
-        });
-        let result = await res.json();
-        if (result.data !== null) {
-          logoutBtn.classList.remove("hidden");
-        }else{
-          localStorage.removeItem("authToken");
-          loginBtn.classList.remove("hidden");
-        }
-    } else{
-      localStorage.removeItem("authToken");
-      loginBtn.classList.remove("hidden");
-    }
+  await tokenCheck();
 });
 
 
@@ -33,7 +12,7 @@ async function signUp(event, form) {
 
 async function signIn(event, form) {
   await handleForm(event,form,"/api/user/auth","PUT",(result)=>{
-    localStorage.setItem("authToken",result.token);
+    localStorage.setItem("authToken",`${result.token_type} ${result.token}`);
     closeDialog("login-dialog");
     form.reset();
     window.location.reload();

@@ -1,16 +1,14 @@
 from fastapi import *
-import os
+from fastapi.security import OAuth2PasswordBearer
 from model.getUser import getUser
 from view.getUser import renderUser
 router = APIRouter()
 
-jwt_secret = os.environ.get("JWT_SECRET")
-algo=os.environ.get("ALGORITHM")
 
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/user/auth")
     
 @router.get("/api/user/auth")
-async def getUsers(request:Request):
-    authorization = request.headers.get("Authorization")
-    results = getUser(authorization, jwt_secret, algo)
+async def getUsers(token: str= Depends(oauth2_scheme)):
+    results = getUser(token)
     return renderUser(results)
     

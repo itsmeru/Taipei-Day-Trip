@@ -2,8 +2,8 @@ from fastapi import FastAPI,Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
-from controller import attractionId, attractions, getUser, mrts, signIn, signUp
-from routers import buildSchedule,deleteSchedule
+from controller import attractionId, attractions, buildSchedule, getUser, mrts, signIn, signUp, getSchedule
+from routers import deleteSchedule
 from database import create_db_pool
 from starlette_session import SessionMiddleware
 
@@ -59,6 +59,7 @@ app.include_router(signUp.router)
 app.include_router(signIn.router)
 app.include_router(getUser.router)
 app.include_router(buildSchedule.router)
+app.include_router(getSchedule.router)
 app.include_router(deleteSchedule.router)
 
 
