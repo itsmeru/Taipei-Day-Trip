@@ -7,6 +7,10 @@ COPY . .
 
 RUN pip3 install --no-cache-dir -r requirements.txt
 
+RUN apt-get update && \
+    apt-get install -y mysql-client && \
+    rm -rf /var/lib/apt/lists/*
+    
 EXPOSE 8000
 # ENV ABC=123
 # ENV MYSQL_HOST=mydb
