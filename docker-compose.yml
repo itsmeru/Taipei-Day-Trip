@@ -9,17 +9,18 @@ services:
       - MYSQL_PASSWORD=betty520
       - JWT_SECRET=ruruisback
       - ALGORITHM=HS256
+    depends_on:
+      - mydb
     volumes:
-      # - /Users/ruru/Desktop/taipei-day-trip:/user/src/app
       - /home/ubuntu/Stage-2-Task/app.py:/app/app.py
 
   mydb:
-    image: mysql
+    image: mysql:5.7
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: "betty520"
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - /Users/ruru/Desktop/taipei-day-trip-db:/var/lib/mysql
       - /home/ubuntu/Stage-2-Task/spot.sql:/docker-entrypoint-initdb.d/spot.sql
