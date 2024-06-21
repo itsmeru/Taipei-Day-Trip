@@ -12,8 +12,6 @@ services:
     volumes:
       # - /Users/ruru/Desktop/taipei-day-trip:/user/src/app
       - /home/ubuntu/Stage-2-Task/app.py:/app/app.py
-    networks:
-      - stage-2-task_default
 
   mydb:
     image: mysql
@@ -23,10 +21,6 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - /Users/ruru/Desktop/taipei-day-trip-db:/var/lib/mysql
+      # - /Users/ruru/Desktop/taipei-day-trip-db:/var/lib/mysql
       - /home/ubuntu/Stage-2-Task/spot.sql:/docker-entrypoint-initdb.d/spot.sql
-    networks:
-      - stage-2-task_default
-networks:
-  stage-2-task_default:
-    external: true
+
