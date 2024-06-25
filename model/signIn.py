@@ -16,7 +16,7 @@ def getSignIn(db_pool, email, password):
                             "name": existing_user["name"],
                             "email": existing_user["email"],
                             "iat": datetime.utcnow(),
-                            "exp": datetime.utcnow() + timedelta(seconds=5)  
+                            "exp": datetime.utcnow() + timedelta(minutes=60)  
                         }
                         header = {
                             "typ": "JWT",
