@@ -5,7 +5,7 @@ from model.getUser import getUser
 
 def getSchedule(db_pool,token):
     data = getUser(token)
-    if data is "error":
+    if data == "error" or data is None:
             return "forbidan"
     user_id = data["data"]["id"]
     try:
