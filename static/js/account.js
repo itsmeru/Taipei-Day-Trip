@@ -1,5 +1,9 @@
+let tokenData = "";
 document.addEventListener("DOMContentLoaded", async () => {
-  await tokenCheck();
+  tokenData = await tokenCheck();
+  if (typeof window.tokenCheckCallback === "function") {
+    window.tokenCheckCallback(tokenData);
+  }
 });
 
 

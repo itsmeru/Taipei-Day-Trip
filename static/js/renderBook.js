@@ -1,4 +1,4 @@
-async function renderBook(result,tokenData){
+async function renderBook(result){
     let bookSection = document.querySelector(".book-section");
     let formDisplay = document.querySelectorAll(".form-section,.book-section,hr");
     let priceDisplay = document.querySelector(".total-price");

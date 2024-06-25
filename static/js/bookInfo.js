@@ -1,9 +1,8 @@
 async function bookInfo(){
-    let token = localStorage.getItem("authToken");
-    if (token){
+    if (tokenData){ //from account.js (global variable)
         window.location.href="/booking";
     }
     else{
-        openDialog('login-dialog');
+        openDialog("login-dialog");
     }
 }
