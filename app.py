@@ -2,10 +2,10 @@ from fastapi import FastAPI,Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
-from controller import attractionId, attractions, buildSchedule, getUser, mrts, signIn, signUp, getSchedule
-from routers import deleteSchedule
+from controller import attractionId, attractions, buildSchedule, getUser, mrts, signIn, signUp, getSchedule,deleteSchedule
 from database import create_db_pool
 from starlette_session import SessionMiddleware
+from fastapi.middleware.cors import CORSMiddleware
 
 from view import staticPages
 
@@ -14,12 +14,18 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.add_middleware(
     SessionMiddleware,
     secret_key="ruruisthebest",
-    max_age=None,
-    cookie_name="session_data",
-    # cookie_secure=True,
-    # cookie_httponly=True  
+    max_age=3600,
+    cookie_name="session_data",    
 )
 
 
@@ -45,10 +51,6 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
     data = {"error": True, "message": error_messages}
     return JSONResponse(status_code=422, content=data)
 
-@app.exception_handler(RequestValidationError)
-async def validation_exception_handler(request: Request, exc: RequestValidationError):
-    data = {"error": True, "message": "輸入錯誤"}
-    return JSONResponse(status_code=422, content=data, media_type="application/json")
 
 
 app.include_router(attractions.router)

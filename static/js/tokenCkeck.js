@@ -11,6 +11,12 @@ async function tokenCheck(){
             }
           });
           let result = await res.json();
+          if (!res.ok){
+            alert(result.error);
+            localStorage.removeItem("authToken");
+            loginBtn.classList.remove("hidden");
+            return null
+          }
           if (result.data !== null) {
             logoutBtn.classList.remove("hidden");
             return result.data

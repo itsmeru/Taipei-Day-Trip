@@ -5,7 +5,7 @@ from model.getUser import getUser
 
 def getSchedule(db_pool,token):
     data = getUser(token)
-    if data["data"] == None:
+    if data is "error":
             return "forbidan"
     user_id = data["data"]["id"]
     try:
@@ -38,7 +38,7 @@ def getSchedule(db_pool,token):
                             "time": time,
                             "price": price
                         }}
-                        bookInfo.append(info)
+                    bookInfo.append(info)
                     return bookInfo
                 else:
                     return None

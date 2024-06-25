@@ -11,8 +11,18 @@ def getBookInfo(db_pool,data):
 
         with db_pool.get_connection() as con:
             with con.cursor(dictionary=True) as cursor:
-                cursor.execute("insert into schedule(user_id,attraction_id,date,time,price)values(%s,%s,%s,%s,%s)",(data["user_id"],data["attraction_id"],data["date"],data["time"],data["price"]))
+                cursor.execute("""
+                        INSERT INTO schedule (user_id, attraction_id, date, time, price)
+                        VALUES (%s, %s, %s, %s, %s)
+                        ON DUPLICATE KEY UPDATE
+                        attraction_id = VALUES(attraction_id),
+                        date = VALUES(date),
+                        time = VALUES(time),
+                        price = VALUES(price)
+                        """, (data["user_id"], data["attraction_id"], data["date"], data["time"], data["price"]))
+
                 con.commit()
+                print("OK")
         datas = {"ok":True}
         return datas
     except HTTPException as http_exc:

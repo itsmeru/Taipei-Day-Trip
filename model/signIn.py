@@ -2,7 +2,6 @@ from model.hashpwd import verify_password
 import jwt
 import os
 from datetime import datetime, timedelta
-
 def getSignIn(db_pool, email, password):
     try:
         with db_pool.get_connection() as con:
@@ -16,7 +15,8 @@ def getSignIn(db_pool, email, password):
                             "id": existing_user["id"],
                             "name": existing_user["name"],
                             "email": existing_user["email"],
-                            "exp": datetime.utcnow() + timedelta(days=7)  
+                            "iat": datetime.utcnow(),
+                            "exp": datetime.utcnow() + timedelta(minutes=30)  
                         }
                         header = {
                             "typ": "JWT",
@@ -25,7 +25,6 @@ def getSignIn(db_pool, email, password):
                         jwt_secret = os.environ.get("JWT_SECRET")
                         algo = os.environ.get("ALGORITHM")
                         token = jwt.encode(token_payload, jwt_secret, algorithm=algo,headers=header)
-
                         data = {"token": token,"token_type": "bearer"}
                         return data
                     return "pwdfail"

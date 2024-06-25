@@ -29,12 +29,15 @@ async function handleForm(event, form, url, method,sucessCb){
   try{
     let res = await fetch(url,{
       method: method,
-      headers:{"Content-Type": "application/json"},
+      headers:{
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({
         name: form.name?.value,
         email: form.email.value,
         password: form.password.value,
-      })
+    })
+
     })
     let result = await res.json();
     if (!res.ok) throw new Error(result.message);

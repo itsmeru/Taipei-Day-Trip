@@ -148,3 +148,6 @@ week11.js
 package-lock.json
 commands
 test.py
+CPUtest.py
+IOtest.py
+set.py
