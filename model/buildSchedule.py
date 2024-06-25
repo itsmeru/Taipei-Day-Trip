@@ -1,14 +1,12 @@
 from http.client import HTTPException
-from model.getUser import getUser
 
 
 def getBookInfo(db_pool,data):
     try:
-        token = data["token"]
-        
-        if getUser(token) == None:
+        token = data["token"]["data"]
+        if token is None:
             return "forbidan"
-
+        
         with db_pool.get_connection() as con:
             with con.cursor(dictionary=True) as cursor:
                 cursor.execute("""
@@ -20,11 +18,9 @@ def getBookInfo(db_pool,data):
                         time = VALUES(time),
                         price = VALUES(price)
                         """, (data["user_id"], data["attraction_id"], data["date"], data["time"], data["price"]))
-
                 con.commit()
-                print("OK")
-        datas = {"ok":True}
-        return datas
+                datas = {"ok":True}
+                return datas
     except HTTPException as http_exc:
         return http_exc
     except Exception as e:

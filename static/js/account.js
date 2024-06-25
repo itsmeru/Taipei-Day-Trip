@@ -12,7 +12,7 @@ async function signUp(event, form) {
 
 async function signIn(event, form) {
   await handleForm(event,form,"/api/user/auth","PUT",(result)=>{
-    localStorage.setItem("authToken",`${result.token_type} ${result.token}`);
+    localStorage.setItem("authToken",`bearer ${result.token}`);
     closeDialog("login-dialog");
     form.reset();
     window.location.reload();

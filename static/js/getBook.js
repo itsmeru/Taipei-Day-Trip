@@ -14,5 +14,5 @@ async function getBook(){
         }
         renderBook(result);
     }
-  
+
 }

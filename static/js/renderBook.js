@@ -8,10 +8,10 @@ async function renderBook(result){
     let user_id = user["id"];
     let userName = user["name"];
     let email = user["email"];
-    let schedule = result["data"];
+    console.log(result);
     let bookTitle = document.querySelector(".book-title");
     bookTitle.textContent = `您好，${user["name"]}，待預定的行程如下：`;
-    if (schedule === null){
+    if (result === null){
         let noneDiv = document.createElement("div");
         noneDiv.className = "body font-medium none-book";
         noneDiv.textContent = "目前沒有任何待預定行程";
@@ -23,14 +23,14 @@ async function renderBook(result){
             if (element.tagName === "HR") {
                 element.style.display = "none";
             } else {
-              element.style.display = schedule ? "block" : "none";
+              element.style.display = result ? "block" : "none";
             }
           });
         firstHr.style.display = "block";
         return;
     }
     firstHr.style.display = "block";
-    let data = result[0]["data"];
+    let data = result["data"];
     let attraction_id = data["attractions"]["id"];
     let images = data["attractions"]["images"];
     let address = data["attractions"]["address"];

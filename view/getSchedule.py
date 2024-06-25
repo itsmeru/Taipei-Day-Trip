@@ -6,8 +6,5 @@ def renderSchedule(result):
     elif result == "error":
         data = {"error":True,"message":"伺服器內部錯誤"}
         return JSONResponse(status_code=500,content=data,media_type="application/json") 
-    elif result is None:
-        data = {"data":None}
-        return JSONResponse(content=data,media_type="application/json")
     else:
         return JSONResponse(content=result,media_type="application/json")

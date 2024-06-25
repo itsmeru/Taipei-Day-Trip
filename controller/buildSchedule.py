@@ -2,6 +2,7 @@ from fastapi import *
 from fastapi.security import OAuth2PasswordBearer
 from pydantic import BaseModel
 from model.buildSchedule import getBookInfo
+from model.getUser import getUser
 from view.buildSchedule import renderBookInfo
 
 router = APIRouter()
@@ -9,17 +10,17 @@ router = APIRouter()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/user/auth")
 
 class Booking(BaseModel):
-    user_id : int
-    attraction_id: int
+    attractionId: int
     date: str 
     time: str 
     price: int
 @router.post("/api/booking")
 async def booking(request:Request,book:Booking,token: str= Depends(oauth2_scheme)):
+    tokenData = getUser(token)
     data={
-        "token" : token,
-        "user_id" : book.user_id,
-        "attraction_id" : book.attraction_id,
+        "token" : tokenData,
+        "user_id" : tokenData["data"]["id"],
+        "attraction_id" : book.attractionId,
         "date" : book.date,
         "time" : book.time,
         "price" : book.price

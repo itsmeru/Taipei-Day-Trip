@@ -1,4 +1,4 @@
-async function booking(form,attraction_id) {
+async function booking(form,attractionId) {
   let date = form.date.value;
   let time = form.querySelector("input[name='halfday']:checked").value;
   let prices = form.querySelector(".money").textContent;
@@ -7,19 +7,18 @@ async function booking(form,attraction_id) {
   let price = parseInt(takePrice); // 2000
   let user = await tokenCheck();
   if (user === null){ openDialog('login-dialog'); return;}
-  user_id = user.id;
   let bookingData = {
-    user_id: user_id,
-    attraction_id: attraction_id,
+    attractionId: attractionId,
     date: date,
     time: time,
     price: price
   };
+  console.log(bookingData);
   try{
     let res = await fetch("/api/booking",{
       method: "POST",
       headers:{
-        "Content-Type":"application/json",
+        "Content-Type": "application/json",
         "Authorization": `${token}`,
       },
       body:JSON.stringify(bookingData)
