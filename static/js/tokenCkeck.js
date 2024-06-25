@@ -13,6 +13,7 @@ async function tokenCheck(){
           let result = await res.json();
           if (!res.ok){
             alert(result.error);
+            window.location.reload();
             localStorage.removeItem("authToken");
             loginBtn.classList.remove("hidden");
             return null

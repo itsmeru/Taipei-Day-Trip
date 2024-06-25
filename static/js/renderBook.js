@@ -1,16 +1,15 @@
-async function renderBook(result){
+async function renderBook(result,tokenData){
     let bookSection = document.querySelector(".book-section");
     let formDisplay = document.querySelectorAll(".form-section,.book-section,hr");
     let priceDisplay = document.querySelector(".total-price");
     let firstHr = document.querySelector(".hrFirst");
     let footDown = document.querySelector(".down");
-    let user = await tokenCheck();
-    let user_id = user["id"];
-    let userName = user["name"];
-    let email = user["email"];
-    console.log(result);
+    
+    let user_id = tokenData["id"];
+    let userName = tokenData["name"];
+    let email = tokenData["email"];
     let bookTitle = document.querySelector(".book-title");
-    bookTitle.textContent = `您好，${user["name"]}，待預定的行程如下：`;
+    bookTitle.textContent = `您好，${userName}，待預定的行程如下：`;
     if (result === null){
         let noneDiv = document.createElement("div");
         noneDiv.className = "body font-medium none-book";

@@ -26,12 +26,12 @@
 </head>
 <script>
   window.addEventListener("DOMContentLoaded",async()=>{
-    let userCk = await tokenCheck();
-    if (userCk === null){
+    let tokenData = await tokenCheck();
+    if (tokenData === null){
       window.location.href="/";
     }
     else{
-      getBook();
+      getBook(tokenData);
     }
   })
 </script>

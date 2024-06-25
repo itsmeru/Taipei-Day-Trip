@@ -13,7 +13,6 @@ async function booking(form,attractionId) {
     time: time,
     price: price
   };
-  console.log(bookingData);
   try{
     let res = await fetch("/api/booking",{
       method: "POST",
