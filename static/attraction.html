@@ -12,11 +12,18 @@
   <link rel="stylesheet" type="text/css" href="/static/css/index.css" />
   <link rel="stylesheet" type="text/css" href="/static/css/attraction.css" />
   <script src="/static/js/account.js" defer></script>
+  <script src="/static/js/renderInfo.js" defer></script>
   <script src="/static/js/spotPage.js" defer></script>
   <script src="/static/js/dialog.js" defer></script>
-  <script src="/static/js/renderInfo.js" defer></script>
   <script src="/static/js/showPic.js" defer></script>
   <script src="/static/js/booking.js" defer></script>
+  <script src="/static/js/bookInfo.js" defer></script>
+  <script src="/static/js/tokenCkeck.js" defer></script>
+  <script src="/static/js/getBook.js" defer></script>
+  <script src="/static/js/renderBook.js" defer></script>
+  <script src="/static/js/bookInfo.js" defer></script>
+
+
 
   <title>Attraction</title>
 </head>
@@ -36,7 +43,7 @@
       </form>
     </div>
   </dialog>
-  ß
+  
   <dialog id="login-dialog">
     <div class="sign-in">
       <div class="sign-in-title dialog-title font-bold">登入帳號</div>
@@ -56,7 +63,7 @@
       <a href="/" class="headline">台北一日遊</a>
       <div class="frame2">
         <div class="frame1">
-          <button class="nav-btn body font-medium">預定行程</button>
+          <button class="nav-btn body font-medium" onclick="bookInfo()">預定行程</button>
           <button class="hidden nav-btn body font-medium" id="login-btn" onclick="openDialog('login-dialog')">登入/註冊</button> 
           <button class="hidden nav-btn body font-medium" id="logout-btn" onclick="logout()">登出系統</button> 
         </div>  
@@ -109,7 +116,7 @@
    function getId(){
     return id;
    }
-    window.onload = function() {spotPage(id);};
+    window.onload = function() {renderInfo(id);};
    
 </script>
 </html>

@@ -29,7 +29,7 @@ CREATE TABLE `account` (
   `email` varchar(255) NOT NULL,
   `time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,7 +38,7 @@ CREATE TABLE `account` (
 
 LOCK TABLES `account` WRITE;
 /*!40000 ALTER TABLE `account` DISABLE KEYS */;
-INSERT INTO `account` VALUES (1,'string','$2b$12$o5yierkQb37ygn6RaCPt2OyUk2Rcw62H72NMgCFHUIrZoZ7aZ/f7C','string','2024-06-13 09:28:35'),(2,'test','$2b$12$YXirWGUSybYiCgBcOc2tNeCZWtSq4iKhZODSsDBxoSGhTiE8jPUge','test','2024-06-13 12:54:43'),(3,'ruru','$2b$12$GGq8bEMYRmrj1ECchGU2uOXfKpfxrjSvpiSuZhZi0sxD0HX9Wedda','ruru','2024-06-13 13:07:33'),(4,'yaya','$2b$12$QrgIHpt8F1Pmbr0kW.H1nu6Y/BQ77YLpSLpKj9FpA/g1TDCcmZyv6','yaya','2024-06-13 13:23:34'),(5,'qqq','$2b$12$lf/bGF2hbo8cCJ7WGdtBFeQwm4QiVV5mGJypGhFDuAQb65Kbr4Az.','qqq','2024-06-13 13:24:03'),(6,'aaa','$2b$12$D9QpbtHlT3ouk.jRUb3CF.0MsjhnanCgZLu.mb9qF7wV7NdgT.AVe','aaa','2024-06-15 08:56:44'),(7,'bbb','$2b$12$fVlAlsDi5h7XzvctpAonPeFOpJtafPTgrh6oIxE4xCuAzMAp2M8xi','bbb','2024-06-15 09:17:55'),(8,'d','$2b$12$/MtbFvkjJ.n6lvzR7MV.rOzZ9MBJBJfpiXRM8Ukhyn7zVpovQljIW','d','2024-06-15 09:25:13');
+INSERT INTO `account` VALUES (17,'ruru','$2b$12$RCeQglkIj4PoLvmQvAKmd.KnkHIsQ7mm.Q3iivs5lib7OHDI7K/3S','ruru@gmail.com','2024-06-18 14:03:15'),(18,'www','$2b$12$fbkJGJ9iY68gbxa7JAZGx.ubjC/TLP4cvX4vyLRbxoJSH7Ei27jtm','www@gmail.com','2024-06-18 14:41:29'),(19,'qqq','$2b$12$ivmIRyLUosST5jE.qwlIWOUF0h5y4BBCVcABD9sCnA0/jmwFo42l6','qqq@gmail.com','2024-06-18 15:47:14'),(20,'string','$2b$12$.fc.xtzjtHDiOQiNFRQrrOIa.ki9lIEcpZ1cgu2lnxnhHCPzU1wY6','user@example.com','2024-06-18 20:56:09');
 /*!40000 ALTER TABLE `account` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -58,10 +58,10 @@ CREATE TABLE `schedule` (
   `price` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `attractionId` (`attraction_id`),
-  KEY `usr_id` (`user_id`),
+  KEY `user_id` (`user_id`),
   CONSTRAINT `schedule_ibfk_1` FOREIGN KEY (`attraction_id`) REFERENCES `spots` (`id`),
   CONSTRAINT `schedule_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `account` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -70,7 +70,7 @@ CREATE TABLE `schedule` (
 
 LOCK TABLES `schedule` WRITE;
 /*!40000 ALTER TABLE `schedule` DISABLE KEYS */;
-INSERT INTO `schedule` VALUES (1,1,1,'2024-06-12','morning',2000);
+INSERT INTO `schedule` VALUES (22,17,3,'2024-06-18','afternoon',2500),(23,17,6,'2024-06-18','morning',2000),(24,17,3,'2024-06-18','morning',2000),(25,17,4,'2024-06-11','afternoon',2500),(26,17,4,'2024-06-11','morning',2000),(27,17,1,'2024-06-21','afternoon',2500);
 /*!40000 ALTER TABLE `schedule` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -143,4 +143,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-06-17  8:11:13
+-- Dump completed on 2024-06-21 11:46:19

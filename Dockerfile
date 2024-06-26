@@ -7,6 +7,7 @@ COPY . .
 
 RUN pip3 install --no-cache-dir -r requirements.txt
 
+
 EXPOSE 8000
 # ENV ABC=123
 # ENV MYSQL_HOST=mydb

@@ -1,16 +1,10 @@
-from fastapi import HTTPException
 from fastapi.responses import JSONResponse
-
-def renderBookInfo(result):
-    if result ==  "forbidan":
+def renderSchedule(result):
+    if result == "forbidan":
         data = {"error":True,"message":"未登入系統，拒絕存取"}
         return JSONResponse(status_code=403,content=data,media_type="application/json")
-    elif isinstance(result, HTTPException):
-        return JSONResponse(status_code=result.status_code, content={"error": True, "message": result.detail})
     elif result == "error":
         data = {"error":True,"message":"伺服器內部錯誤"}
         return JSONResponse(status_code=500,content=data,media_type="application/json") 
     else:
         return JSONResponse(content=result,media_type="application/json")
-
-

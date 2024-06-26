@@ -1,26 +1,9 @@
+let tokenData = "";
 document.addEventListener("DOMContentLoaded", async () => {
-  let loginBtn = document.getElementById("login-btn");
-  let logoutBtn = document.getElementById("logout-btn");
-    let token = localStorage.getItem("authToken");
-    if (token) {
-        let res = await fetch("/api/user/auth", {
-          method: "GET",
-          headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json"
-          }
-        });
-        let result = await res.json();
-        if (result.data !== null) {
-          logoutBtn.classList.remove("hidden");
-        }else{
-          localStorage.removeItem("authToken");
-          loginBtn.classList.remove("hidden");
-        }
-    } else{
-      localStorage.removeItem("authToken");
-      loginBtn.classList.remove("hidden");
-    }
+  tokenData = await tokenCheck();
+  if (typeof window.tokenCheckCallback === "function") {
+    window.tokenCheckCallback(tokenData);
+  }
 });
 
 
@@ -33,7 +16,7 @@ async function signUp(event, form) {
 
 async function signIn(event, form) {
   await handleForm(event,form,"/api/user/auth","PUT",(result)=>{
-    localStorage.setItem("authToken",result.token);
+    localStorage.setItem("authToken",`bearer ${result.token}`);
     closeDialog("login-dialog");
     form.reset();
     window.location.reload();
@@ -50,12 +33,15 @@ async function handleForm(event, form, url, method,sucessCb){
   try{
     let res = await fetch(url,{
       method: method,
-      headers:{"Content-Type": "application/json"},
+      headers:{
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({
         name: form.name?.value,
         email: form.email.value,
         password: form.password.value,
-      })
+    })
+
     })
     let result = await res.json();
     if (!res.ok) throw new Error(result.message);

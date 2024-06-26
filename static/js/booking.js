@@ -1,17 +1,31 @@
-async function booking(form,id) {
+async function booking(form,attractionId) {
   let date = form.date.value;
-  let halfday = form.querySelector("input[name='halfday']:checked").value;
-  let cost = form.querySelector(".money").textContent;
+  let time = form.querySelector("input[name='halfday']:checked").value;
+  let prices = form.querySelector(".money").textContent;
   let token = localStorage.getItem("authToken");
+  let takePrice = prices.split(" ")[1]; //新台幣 2000元
+  let price = parseInt(takePrice); // 2000
+  if (tokenData === null){ openDialog('login-dialog'); return;}
   let bookingData = {
-    id : id,
+    attractionId: attractionId,
     date: date,
-    halfday: halfday,
-    cost: cost
+    time: time,
+    price: price
   };
-
-  localStorage.setItem("bookingData", JSON.stringify(bookingData));
-
-  window.location.href = "/booking";
+  try{
+    let res = await fetch("/api/booking",{
+      method: "POST",
+      headers:{
+        "Content-Type": "application/json",
+        "Authorization": `${token}`,
+      },
+      body:JSON.stringify(bookingData)
+    })
+    if (res.ok){
+      window.location.href = "/booking";
+    }
+  }catch (err){
+    return err.message;
+  }
 
 }
