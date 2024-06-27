@@ -1,8 +1,7 @@
 async function bookInfo(){
-    if (tokenData){ //from account.js (global variable)
+    if (tokenData !== null) {
         window.location.href="/booking";
-    }
-    else{
+    } else{
         openDialog("login-dialog");
     }
 }

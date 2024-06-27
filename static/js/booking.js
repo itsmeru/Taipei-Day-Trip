@@ -5,7 +5,9 @@ async function booking(form,attractionId) {
   let token = localStorage.getItem("authToken");
   let takePrice = prices.split(" ")[1]; //新台幣 2000元
   let price = parseInt(takePrice); // 2000
-  if (tokenData === null){ openDialog('login-dialog'); return;}
+  window.tokenCheckCallback = function(tokenData) {
+    if (tokenData === null) {("login-dialog"); return;}
+  }
   let bookingData = {
     attractionId: attractionId,
     date: date,
@@ -25,6 +27,7 @@ async function booking(form,attractionId) {
       window.location.href = "/booking";
     }
   }catch (err){
+    console.log(err.message);
     return err.message;
   }
 

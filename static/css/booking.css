@@ -93,11 +93,11 @@ hr{
     margin-right: 10px;
     font-weight: bold;
 }
-.form-row input[type="text"] {
+.form-row input[type="text"],.cardStyle {
     width: 200px;
     height: 38px;
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid #cccccc;
     border-radius: 5px;
 
 }

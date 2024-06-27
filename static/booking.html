@@ -12,6 +12,8 @@
   <link rel="stylesheet" type="text/css" href="/static/css/index.css" />
   <link rel="stylesheet" type="text/css" href="/static/css/attraction.css" />
   <link rel="stylesheet" type="text/css" href="/static/css/booking.css" />
+  <!-- <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script> -->
+  <script src="https://js.tappaysdk.com/sdk/tpdirect/v5.18.0"></script>
   <script src="/static/js/account.js" defer></script>
   <script src="/static/js/tokenCkeck.js" defer></script>
   <script src="/static/js/getBook.js" defer></script>
@@ -21,6 +23,7 @@
   <script src="/static/js/bookInfo.js" defer></script>
   <script src="/static/js/booking.js" defer></script>
   <script src="/static/js/deleteSchedule.js" defer></script>
+  <script src="/static/js/getCard.js" defer></script>
 
 
   <title>Booking</title>
@@ -33,6 +36,7 @@
       getBook();
     }
   };
+
 </script>
 <body>
   <dialog id="register-dialog">
@@ -97,26 +101,71 @@
     <div class="body font-bold info">請保持手機暢通，準時到達，導覽人員將用手機與您聯繫，務必留下正確的聯絡方式。</div>
 </div>
 <hr>
-
   <div class="form-section">
-      <div class="btn font-bold contact-info">信用卡付款資訊</div>
-      <div class="form-row">
-          <label for="cardNumber">卡片號碼:</label>
-          <input type="text" id="cardNumber" name="cardNumber">
-      </div>
-      <div class="form-row">
-          <label for="expiryDate">過期時間:</label>
-          <input type="text" id="expiryDate" name="expiryDate">
-      </div>
-      <div class="form-row">
-          <label for="cvv">驗證密碼:</label>
-          <input type="text" id="cvv" name="cvv">
-      </div>
-  </div>
+    <div class="btn font-bold contact-info">信用卡付款資訊</div>
+    <div class="form-row">
+      <label for="cardNumber">卡片號碼:</label>
+      <div class="cardStyle" id="cardNumber-container"></div>
+    </div>
+    <div class="form-row">
+      <label for="expiryDate">過期時間:</label>
+      <div class="cardStyle" id="expiryDate-container"></div>
+    </div>
+    <div class="form-row">
+      <label for="cvv">驗證密碼:</label>
+      <div class="cardStyle" id="cvv-container"></div>
+    </div>
+  
   <hr>
 
   <div class="total-price"></div>
   <footer class="down body font-bold">COPYRIGHT © 2021 台北一日遊</footer>
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+    try {
+        TPDirect.setupSDK(151574, 'app_RLbQdcQtTvA8zk24OpLC8ykggWHi52PgyOHAe5kAiQdTpsFcsEx2UiUQmUQF', 'sandbox');
+        console.log("TapPay SDK setup successful.");
+
+        TPDirect.card.setup({
+            fields: {
+                number: {
+                    element: '#cardNumber-container',
+                    placeholder: '**** **** **** ****'
+                },
+                expirationDate: {
+                    element: '#expiryDate-container',
+                    placeholder: 'MM / YY'
+                },
+                ccv: {
+                    element: '#cvv-container',
+                    placeholder: '後三碼'
+                }
+            },
+            isMaskCreditCardNumber: true,
+            maskCreditCardNumberRange: {
+                beginIndex: 6,
+                endIndex: 11
+            }
+        });
+
+        // 监听字段状态变化
+        TPDirect.card.onUpdate(function (update) {
+          console.log('Update:', update);
+            if (update.canGetPrime) {
+                // 可以获取 prime，执行获取操作
+              console.log("OK");
+            } else {
+                console.log('输入字段尚未准备好。');
+            }
+        });
+
+    } catch (error) {
+        console.error("TapPay SDK setup error:", error);
+    }
+});
+  </script>
 
 </body>
 </html>

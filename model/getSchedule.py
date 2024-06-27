@@ -36,7 +36,6 @@ def getSchedule(db_pool,token):
                         "time": time,
                         "price": price
                     }}
-                    print(info)
                     return info
                 else:
                     return None

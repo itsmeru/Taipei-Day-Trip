@@ -97,6 +97,7 @@ async function renderBook(result){
     let priceBtn = document.createElement("button");
     priceBtn.className = "btn font-regular price-btn";
     priceBtn.textContent = "確認訂購並付款";
+    priceBtn.onclick = function(){getCard();}
     totalPrice.append(priceText,priceBtn);
 
     
