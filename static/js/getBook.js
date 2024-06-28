@@ -1,6 +1,6 @@
 async function getBook(){
     let token = localStorage.getItem("authToken");
-        if (tokenData){
+        if (window.tokenResult){
             let res = await fetch("/api/booking", {
                 method: "GET",
                 headers: {

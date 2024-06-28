@@ -37,6 +37,7 @@ hr{
     display: flex;
     justify-content: space-between;
     height: 24px;
+    margin-bottom: 10px2v5ytr;
 }
 .title-text{
     display: flex;
@@ -54,8 +55,9 @@ hr{
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    position: relative; 
+    gap: 10px;
+    position: relative;
+    padding-bottom: 30px;
 
 }
 .none-book{

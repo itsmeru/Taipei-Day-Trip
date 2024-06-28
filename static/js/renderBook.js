@@ -5,9 +5,9 @@ async function renderBook(result){
     let firstHr = document.querySelector(".hrFirst");
     let footDown = document.querySelector(".down");
     
-    let user_id = tokenData["id"];
-    let userName = tokenData["name"];
-    let email = tokenData["email"];
+    let user_id = window.tokenResult["id"];
+    let userName = window.tokenResult["name"];
+    let email = window.tokenResult ["email"];
     let bookTitle = document.querySelector(".book-title");
     bookTitle.textContent = `您好，${userName}，待預定的行程如下：`;
     if (result === null){
@@ -99,6 +99,4 @@ async function renderBook(result){
     priceBtn.textContent = "確認訂購並付款";
     priceBtn.onclick = function(){getCard();}
     totalPrice.append(priceText,priceBtn);
-
-    
 }

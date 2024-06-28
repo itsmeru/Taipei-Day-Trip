@@ -12,8 +12,9 @@
   <link rel="stylesheet" type="text/css" href="/static/css/index.css" />
   <link rel="stylesheet" type="text/css" href="/static/css/attraction.css" />
   <link rel="stylesheet" type="text/css" href="/static/css/booking.css" />
-  <!-- <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script> -->
-  <script src="https://js.tappaysdk.com/sdk/tpdirect/v5.18.0"></script>
+ <script src="https://js.tappaysdk.com/sdk/tpdirect/v5.18.0"></script>
+ <script type="module" src="/static/js/controller/dom.js" defer></script>
+
   <script src="/static/js/account.js" defer></script>
   <script src="/static/js/tokenCkeck.js" defer></script>
   <script src="/static/js/getBook.js" defer></script>
@@ -36,7 +37,6 @@
       getBook();
     }
   };
-
 </script>
 <body>
   <dialog id="register-dialog">
@@ -76,7 +76,7 @@
         <div class="frame1">
           <button class="nav-btn body font-medium" onclick="bookInfo()">預定行程</button>
           <button class="hidden nav-btn body font-medium " id="login-btn" onclick="openDialog('login-dialog')">登入/註冊</button> 
-          <button class="hidden nav-btn body font-medium " id="logout-btn" onclick="logout()">登出系統</button>     </div>  
+          <button class="hidden nav-btn body font-medium " id="logout-btn" onclick="logout()">登出系統</button></div>  
       </div>
     </div>
   </nav>
@@ -115,7 +115,7 @@
       <label for="cvv">驗證密碼:</label>
       <div class="cardStyle" id="cvv-container"></div>
     </div>
-  
+  </div>
   <hr>
 
   <div class="total-price"></div>

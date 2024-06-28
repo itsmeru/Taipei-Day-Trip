@@ -1,12 +1,3 @@
-let tokenData = "";
-document.addEventListener("DOMContentLoaded", async () => {
-  tokenData = await tokenCheck();
-  if (typeof window.tokenCheckCallback === "function") {
-    window.tokenCheckCallback(tokenData);
-  }
-});
-
-
 async function signUp(event, form) {
   await handleForm(event, form,"/api/user","POST",()=>{
     showMessage(form, "註冊成功，請登入系統", "msg", "green");
@@ -69,3 +60,4 @@ async function logout() {
   localStorage.removeItem("authToken");
   window.location.reload();
 };
+

@@ -1,5 +1,5 @@
 async function bookInfo(){
-    if (tokenData !== null) {
+    if (window.tokenResult !== null) {
         window.location.href="/booking";
     } else{
         openDialog("login-dialog");
