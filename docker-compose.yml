@@ -31,4 +31,5 @@ services:
       retries: 10
     volumes:
       - /home/ubuntu/Stage-2-Task/mysql:/var/lib/mysql
+      - /home/ubuntu/spot.sql:/docker-entrypoint-initdb.d/spot.sql
      
