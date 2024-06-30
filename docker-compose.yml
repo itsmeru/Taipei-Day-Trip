@@ -31,3 +31,9 @@ services:
       retries: 10
     volumes:
       - /home/ubuntu/Stage-2-Task/mysql:/var/lib/mysql
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - /home/ubuntu/Stage-2-Task/redis_data:/data

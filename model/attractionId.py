@@ -1,6 +1,6 @@
 import json
 import redis
-attraction_redis = redis.Redis(host="localhost", port=6379, db=1)
+attraction_redis = redis.Redis(host="redis", port=6379, db=1)
 
 def getAttractionId(db_pool, attractionId):
     try:

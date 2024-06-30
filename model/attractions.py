@@ -1,6 +1,6 @@
 import json
 import redis
-spots_redis = redis.Redis(host="localhost", port=6379, db=2)
+spots_redis = redis.Redis(host="redis", port=6379, db=2)
 def getAttractions(db_pool,start_index, items_per_page, keyword):
     try:
         cache_key = f"attractions:{keyword}:{start_index}:{items_per_page}"
