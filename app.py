@@ -1,6 +1,5 @@
 from fastapi import *
 from fastapi.exceptions import RequestValidationError
-from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from controller import attractionId, attractions, buildSchedule, getUser, mrts, signIn, signUp, getSchedule,deleteSchedule,tappay
 from starlette_session import SessionMiddleware

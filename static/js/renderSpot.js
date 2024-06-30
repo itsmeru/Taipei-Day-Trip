@@ -1,4 +1,4 @@
-function showSpot(name, mrt_station, catego, first_img, id) {
+function renderSpot(name, mrt_station, catego, first_img, id) {
   let attractions = document.querySelector(".attractions");
   let attractions_group = document.createElement("div");
   attractions_group.classList.add("attractions-group");

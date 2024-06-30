@@ -25,10 +25,11 @@ async function booking(form,attractionId) {
     })
     if (res.ok){
       window.location.href = "/booking";
+      localStorage.setItem("cart",JSON.stringify(bookingData));
+
     }
   }catch (err){
     console.log(err.message);
     return err.message;
   }
-
 }

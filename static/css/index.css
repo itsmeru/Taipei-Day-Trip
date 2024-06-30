@@ -52,6 +52,10 @@ button.hidden{
   cursor: pointer;
   color: #666666;
 }
+.loadmore{
+  text-align: center;
+  color: #666666;
+}
 
 .welcome{
   max-width: 1920px;
@@ -222,6 +226,8 @@ dialog::backdrop {
   outline: none;
   border-radius: 5px 0 0 5px;
   box-shadow: 0px 0px 20px #AABBCC;
+  color: #757575;
+
 }
 .search-button{
   width: 60px;

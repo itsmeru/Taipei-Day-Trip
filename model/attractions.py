@@ -1,5 +1,14 @@
+import json
+import redis
+spots_redis = redis.Redis(host="localhost", port=6379, db=2)
 def getAttractions(db_pool,start_index, items_per_page, keyword):
-    try: 
+    try:
+        cache_key = f"attractions:{keyword}:{start_index}:{items_per_page}"
+        redis_data = spots_redis.get(cache_key)
+        if redis_data:
+            data = json.loads(redis_data)
+            return data 
+        
         with db_pool.get_connection() as con:
             with con.cursor(dictionary=True) as cursor:
                 cursor.execute("SELECT  COUNT(*)  FROM spots WHERE MRT = %s OR name LIKE %s ", (keyword, '%' + keyword + '%'))
@@ -7,7 +16,8 @@ def getAttractions(db_pool,start_index, items_per_page, keyword):
                 total_num = total_num = results[0]["COUNT(*)"]
                 total_page = total_num / 12
                 if not results:
-                    return None,0
+                    data = {"results": None, "total_page": 0}
+                    return data
                 
                 cursor.execute("SELECT * FROM spots WHERE MRT = %s OR name LIKE %s LIMIT %s,%s", (keyword, '%' + keyword + '%', start_index, items_per_page))
                 results = cursor.fetchall()
@@ -16,7 +26,10 @@ def getAttractions(db_pool,start_index, items_per_page, keyword):
                     cursor.execute("SELECT images FROM spot_imgs WHERE img_id = %s", (id,))
                     img_urls = [row["images"] for row in cursor.fetchall()]
                     result["images"] = img_urls
-                return results,total_page
+                    data = {"results": results, "total_page": total_page}
+                    spots_redis.set(cache_key, json.dumps(data))
+                return data
     except Exception as e:
         print(f"Unhandled exception: {e}")
-        return "error"
+        data = {"results": "error", "total_page": 0}
+        return data

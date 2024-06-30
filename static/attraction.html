@@ -24,12 +24,24 @@
   <script src="/static/js/getBook.js" defer></script>
   <script src="/static/js/renderBook.js" defer></script>
   <script src="/static/js/bookInfo.js" defer></script>
-
-
+  <script src="/static/js/bookToSession.js" defer></script>
 
   <title>Attraction</title>
 </head>
 <body>
+
+  <script>
+    let pathname = window.location.pathname;
+    let parts = pathname.split('/');
+    let id = parts[parts.length - 1];
+    
+    function getId(){
+     return id;
+    }
+     window.onload = function() {renderInfo(id);};
+    
+ </script>
+
   <dialog id="register-dialog">
     <div class="sign-in">
       <div class="sign-in-title dialog-title font-bold">註冊會員帳號</div>
@@ -111,14 +123,4 @@
 
 </body>
 
-<script>
-   let pathname = window.location.pathname;
-   let parts = pathname.split('/');
-   let id = parts[parts.length - 1];
-   function getId(){
-    return id;
-   }
-    window.onload = function() {renderInfo(id);};
-   
-</script>
 </html>

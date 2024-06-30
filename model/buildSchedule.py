@@ -1,12 +1,15 @@
 from http.client import HTTPException
 
+import redis
+schedule_redis = redis.Redis(host="localhost", port=6379, db=0)
 
-def getBookInfo(db_pool,data):
+def getBookInfo(db_pool,cart,tokenData):
     try:
-        token = data["token"]["data"]
+        token = tokenData["data"]
         if token is None:
             return "forbidan"
-        
+        user_id = tokenData["data"]["id"]
+       
         with db_pool.get_connection() as con:
             with con.cursor(dictionary=True) as cursor:
                 cursor.execute("""
@@ -17,7 +20,8 @@ def getBookInfo(db_pool,data):
                         date = VALUES(date),
                         time = VALUES(time),
                         price = VALUES(price)
-                        """, (data["user_id"], data["attraction_id"], data["date"], data["time"], data["price"]))
+                        """, (user_id, cart["attraction_id"], cart["date"], cart["time"], cart["price"]))
+                schedule_redis.delete(user_id)
                 con.commit()
                 datas = {"ok":True}
                 return datas
