@@ -7,3 +7,4 @@ starlette_session
 pydantic[email]
 email-validator
 requests
+redis
