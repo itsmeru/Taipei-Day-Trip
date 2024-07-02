@@ -32,3 +32,8 @@ services:
     volumes:
       - /home/ubuntu/Stage-2-Task/mysql:/var/lib/mysql
       - /home/ubuntu/Stage-2-Task/spot.sql:/docker-entrypoint-initdb.d/spot.sql
+  redis:
+      image: redis:latest
+      container_name: myredis
+      ports:
+        - "6379:6379"
