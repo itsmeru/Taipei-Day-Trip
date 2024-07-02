@@ -20,7 +20,7 @@ async function renderOrder(){
         }
         document.querySelector(".form-container").style.display = "none";
         document.querySelector(".result-container").style.display = "block";
-        document.querySelector("body").style.backgroundImage = "url(/static/pic/thankyou.jpg)";
+        document.querySelector("body").style.backgroundImage = "url('/static/pic/fin.jpg')";
       
         let orderNum = result.data.number;
         let spot = result.data.trip.attraction.name;

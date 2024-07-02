@@ -2,7 +2,7 @@ import json
 import redis
 import time
 
-spots_redis = redis.Redis(host="redis", port=6379, db=0)
+spots_redis = redis.Redis(host="localhost", port=6379, db=0)
 
 def getAttractions(db_pool, start_index, items_per_page, keyword):
     try:

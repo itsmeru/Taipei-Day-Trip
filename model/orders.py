@@ -1,15 +1,12 @@
-import time
 import requests
-import redis
-import json
 from datetime import datetime
 from model.getUser import getUser
+import httpx
 
-def getOrders(db_pool, token, bookInfo, order_data):
+async def getOrders(db_pool, token, bookInfo, order_data):
     tokenData = getUser(token)
     if tokenData == "error" or tokenData is None:
             return "forbidan"
-    order_redis = redis.Redis(host="localhost", port=6379, db=0)
     
     user_id = tokenData["data"]["id"]
 
@@ -64,11 +61,9 @@ def getOrders(db_pool, token, bookInfo, order_data):
                     "contact_phone": bookInfo.order.contact.phone,
                     "status": "UNPAID"
                 }
-                cache_key = f"order_id:{order_id},user_id:{user_id}"
-                order_redis.set(cache_key, json.dumps(data))
-                order_redis.expire(cache_key, 3600)
+              
         
-            order_status, request_time, data = sendPrime(order_data, token)
+            order_status, request_time, data = await sendPrime(order_data, token)
             
             if order_status == "API error":
                 updateOrderStatus(con, cursor, order_id, "FAILED",order_number=data["order_number"] ,cancelled_at=request_time)
@@ -97,7 +92,7 @@ def getOrders(db_pool, token, bookInfo, order_data):
                 }
                 return {"error": False, "payment_result": payment_result}
 
-def sendPrime(order_data, token):
+async def sendPrime(order_data, token):
     tap_pay_url = "https://sandbox.tappaysdk.com/tpc/payment/pay-by-prime"
     headers = {
         "Content-Type": "application/json",
@@ -107,19 +102,22 @@ def sendPrime(order_data, token):
     
     try:
         request_time = datetime.now()
-        response = requests.post(tap_pay_url, json=order_data, headers=headers)
-        response.raise_for_status()
-        response_data = response.json()
+        async with httpx.AsyncClient() as client:
+            response = await client.post(tap_pay_url, json=order_data, headers=headers)
+            response.raise_for_status()
+            response_data = response.json()
+        
         status = response_data["status"]
         order_number = response_data["rec_trade_id"]
 
         if status == 0:
-            data = {"status": status,"order_number":order_number}
+            data = {"status": status, "order_number": order_number}
             return "OK", request_time, data
-        data = {"error": True, "status": status, "message": response_data["msg"],"order_number":order_number}
-        return "API error", request_time, data
+        else:
+            data = {"error": True, "status": status, "message": response_data.get("msg", "Unknown error"), "order_number": order_number}
+            return "API error", request_time, data
     
-    except requests.exceptions.HTTPError as http_err:
+    except httpx.HTTPStatusError as http_err:
         error_message = http_err.response.text
         data = {"error": True, "status": http_err.response.status_code, "message": error_message}
         print(f"HTTP error occurred: {http_err}")
@@ -130,7 +128,6 @@ def sendPrime(order_data, token):
         data = {"error": True, "status": 500, "message": error_message}
         print(f"Other error occurred: {err}")
         return "error", request_time, data
-
 def updateOrderStatus(con, cursor, order_id, status, order_number=None, paid_at=None, cancelled_at=None, completed_at=None):
     cursor.execute("UPDATE orders SET status = %s, order_number = %s, paid_at = %s, cancelled_at = %s, completed_at = %s WHERE id = %s", (status, order_number, paid_at, cancelled_at, completed_at, order_id))
     con.commit()

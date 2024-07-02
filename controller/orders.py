@@ -34,7 +34,7 @@ class CheckInfo(BaseModel):
     prime: str
     order: Order
 @router.post("/api/orders")
-def orders(request:Request,bookInfo:CheckInfo,token: str= Depends(oauth2_scheme)):
+async def orders(request:Request,bookInfo:CheckInfo,token: str= Depends(oauth2_scheme)):
     db_pool = request.state.db_pool.get("spot")
     order_data = {
         "prime": bookInfo.prime,
@@ -52,7 +52,7 @@ def orders(request:Request,bookInfo:CheckInfo,token: str= Depends(oauth2_scheme)
         "remember": True,
     }
 
-    results = getOrders(db_pool,token,bookInfo,order_data)
+    results = await getOrders(db_pool,token,bookInfo,order_data)
     return renderOrders(results)
    
 

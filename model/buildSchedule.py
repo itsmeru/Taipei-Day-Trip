@@ -1,7 +1,7 @@
 from http.client import HTTPException
 
 import redis
-schedule_redis = redis.Redis(host="redis", port=6379, db=0)
+schedule_redis = redis.Redis(host="localhost", port=6379, db=0)
 
 def getBookInfo(db_pool,cart,tokenData):
     try:

@@ -49,8 +49,8 @@ async function orders(bookData,user_id) {
         window.location.href = `/thankyou?number=${result["data"]["number"]}`;
 
         } catch (err) {
-        console.error(err);
-        alert(err);
+            console.error(err);
+            alert(err);
         }finally{
             document.getElementById("loading").style.display = "none";
         }

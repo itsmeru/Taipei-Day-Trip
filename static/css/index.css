@@ -52,6 +52,41 @@ button.hidden{
   cursor: pointer;
   color: #666666;
 }
+.burger-menu{
+  display: none;
+  cursor: pointer;
+}
+.burger-menu img{
+  text-align: center;
+  margin: 4px 10px 0 10px;
+}
+
+.popup-menu {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  background-color: #ffffff;
+  width: 50%; 
+  height: 100vh; 
+  border: 1px solid #ccc;
+  z-index: 1000; 
+}
+
+.popup-menu.active {
+  display: block;
+}
+
+.close-icon {
+  position: absolute;
+  top: 3px;
+  right: 6px;
+  cursor: pointer;
+  font-size: 30px; 
+  color: #666666; 
+  font-weight: bold;
+  margin: 0;
+}
 .loadmore{
   text-align: center;
   color: #666666;
@@ -423,6 +458,9 @@ button img {
     grid-template-columns: repeat(2, 1fr);
     grid-column: span 2;
   }
+ 
+  
+
   
 }
 
@@ -474,5 +512,16 @@ button img {
   .container-img{
     height: 235px;
   }
+  .burger-menu {
+    display: block;
+  }
+  .frame1 {
+    display: none;
+  }
+  
+  .popup-menu .nav-btn {
+    padding: 30px 40px;
+  }
+
 }
 
