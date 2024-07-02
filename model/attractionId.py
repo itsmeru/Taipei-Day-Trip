@@ -1,11 +1,11 @@
 import json
 import redis
-attraction_redis = redis.Redis(host="localhost", port=6379, db=0)
+attraction_redis = redis.Redis(host="redis", port=6379, db=0)
 
 def getAttractionId(db_pool, attractionId):
     try:
         cache_key = f"attractionID:{attractionId}"
-        redis_data = attraction_redis.get(attractionId)
+        redis_data = attraction_redis.get(cache_key)
         if redis_data:
             data = json.loads(redis_data)
             print("SUCESSSS")
@@ -22,7 +22,7 @@ def getAttractionId(db_pool, attractionId):
                 img_urls = [row["images"] for row in cursor.fetchall()]
                 spots_data["images"] = img_urls
                 data = {"data":spots_data}
-                attraction_redis.set(attractionId, json.dumps(data))
+                attraction_redis.set(cache_key, json.dumps(data))
                 return data
     except Exception as e:
         print(f"Unhandled exception: {e}")
