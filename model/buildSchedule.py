@@ -1,7 +1,7 @@
 from http.client import HTTPException
 
 import redis
-schedule_redis = redis.Redis(host="redis", port=6379, db=0)
+schedule_redis = redis.Redis(host="localhost", port=6379, db=0)
 
 def getBookInfo(db_pool,cart,tokenData):
     try:
@@ -21,7 +21,8 @@ def getBookInfo(db_pool,cart,tokenData):
                         time = VALUES(time),
                         price = VALUES(price)
                         """, (user_id, cart["attraction_id"], cart["date"], cart["time"], cart["price"]))
-                schedule_redis.delete(user_id)
+                cache_key = f"member:{user_id}"
+                schedule_redis.delete(cache_key)
                 con.commit()
                 datas = {"ok":True}
                 return datas

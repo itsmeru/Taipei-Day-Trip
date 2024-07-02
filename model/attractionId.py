@@ -1,9 +1,10 @@
 import json
 import redis
-attraction_redis = redis.Redis(host="redis", port=6379, db=1)
+attraction_redis = redis.Redis(host="localhost", port=6379, db=0)
 
 def getAttractionId(db_pool, attractionId):
     try:
+        cache_key = f"attractionID:{attractionId}"
         redis_data = attraction_redis.get(attractionId)
         if redis_data:
             data = json.loads(redis_data)

@@ -24,7 +24,9 @@
   <script src="/static/js/bookInfo.js" defer></script>
   <script src="/static/js/booking.js" defer></script>
   <script src="/static/js/deleteSchedule.js" defer></script>
-  <script src="/static/js/getCard.js" defer></script>
+  <script src="/static/js/getPrime.js" defer></script>
+  <script src="/static/js/searchSchedule.js" defer></script>
+
 
 
   <title>Booking</title>
@@ -75,6 +77,7 @@
       <div class="frame2">
         <div class="frame1">
           <button class="nav-btn body font-medium" onclick="bookInfo()">預定行程</button>
+          <button class="nav-btn body font-medium" onclick="searchSchedule()">查詢行程</button>
           <button class="hidden nav-btn body font-medium " id="login-btn" onclick="openDialog('login-dialog')">登入/註冊</button> 
           <button class="hidden nav-btn body font-medium " id="logout-btn" onclick="logout()">登出系統</button></div>  
       </div>
@@ -84,19 +87,23 @@
   <div class=" btn font-bold book-title"></div>
   <section class="book-section"></section>
   <hr>
+  <div id="loading">
+    <div class="spinner"></div>
+    <p>付款中，请稍候...</p>
+  </div>
   <div class="form-section">
     <div class="btn font-bold contact-info">您的聯絡資訊</div>
     <div class="form-row">
         <label for="name">聯絡姓名:</label>
-        <input type="text"  name="name" id="nameInput">
+        <input type="text"  name="name" id="nameInput" required>
     </div>
     <div class="form-row">
         <label for="email">聯絡信箱:</label>
-        <input type="text"  name="email" id="emailInput">
+        <input type="text"  name="email" id="emailInput" required>
     </div>
     <div class="form-row">
         <label for="phone">手機號碼:</label>
-        <input type="text" id="phone" name="phone">
+        <input type="text" id="phone" name="phone" required>
     </div>
     <div class="body font-bold info">請保持手機暢通，準時到達，導覽人員將用手機與您聯繫，務必留下正確的聯絡方式。</div>
 </div>
@@ -125,7 +132,7 @@
   <script>
     document.addEventListener('DOMContentLoaded', function () {
     try {
-        TPDirect.setupSDK(151574, 'app_RLbQdcQtTvA8zk24OpLC8ykggWHi52PgyOHAe5kAiQdTpsFcsEx2UiUQmUQF', 'sandbox');
+        TPDirect.setupSDK(151574, "app_RLbQdcQtTvA8zk24OpLC8ykggWHi52PgyOHAe5kAiQdTpsFcsEx2UiUQmUQF", "sandbox");
         console.log("TapPay SDK setup successful.");
 
         TPDirect.card.setup({
@@ -142,23 +149,33 @@
                     element: '#cvv-container',
                     placeholder: '後三碼'
                 }
-            },
+            }, styles: {
+              ".valid": {
+                  "color": "green"
+              },
+              ".invalid": {
+                  "color": "red"
+              },
+        
+              "@media screen and (max-width: 400px)": {
+                  "input": {
+                      "color": "orange"
+                  }
+              }
+          },
             isMaskCreditCardNumber: true,
             maskCreditCardNumberRange: {
                 beginIndex: 6,
                 endIndex: 11
             }
+
+            
         });
 
-        // 监听字段状态变化
+        // 監聽輸入變化
         TPDirect.card.onUpdate(function (update) {
-          console.log('Update:', update);
-            if (update.canGetPrime) {
-                // 可以获取 prime，执行获取操作
-              console.log("OK");
-            } else {
-                console.log('输入字段尚未准备好。');
-            }
+          // console.log("Update:", update);
+          updatePaymentButton();  
         });
 
     } catch (error) {

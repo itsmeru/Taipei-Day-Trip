@@ -89,7 +89,11 @@ async function renderBook(result){
     let emailInput = document.getElementById("emailInput");
     nameInput.value = userName;
     emailInput.value = email;
-        
+
+    let phoneInput = document.getElementById("phone");
+
+    
+  
     let totalPrice = document.querySelector(".total-price");
     let priceText = document.createElement("div");
     priceText.className = "body font-bold price-text";
@@ -97,6 +101,49 @@ async function renderBook(result){
     let priceBtn = document.createElement("button");
     priceBtn.className = "btn font-regular price-btn";
     priceBtn.textContent = "確認訂購並付款";
-    priceBtn.onclick = function(){getCard();}
+    priceBtn.onclick = function(){
+        if (nameInput.value === "" || emailInput.value === "" || phoneInput.value === "") {
+            alert("請填寫所有必需的聯絡資訊");
+            return;
+        }
+        else if (updatePaymentButton()){
+           
+            let bookData = {
+                "order": {
+                  "price": data["price"],
+                  "trip": {
+                    "attraction": {
+                      "id": attraction_id,
+                      "name": attractionName,
+                      "address": address,
+                      "image": images
+                    },
+                    "date": date,
+                    "time": data["time"]
+                  },
+                  "contact": {
+                    "name": nameInput.value,
+                    "email": emailInput.value,
+                    "phone": phoneInput.value
+                  }
+                }
+              }
+        
+            getPrime(bookData,user_id);
+        }
+        else{
+            alert("信用卡資訊錯誤")
+        }
+    }
     totalPrice.append(priceText,priceBtn);
+}
+function updatePaymentButton(){
+    
+    let canGetPrime = TPDirect.card.getTappayFieldsStatus().canGetPrime;
+
+    if (canGetPrime) {
+        return true;
+    } else {
+        return false;
+    }
 }

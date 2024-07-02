@@ -4,7 +4,7 @@ from model.getUser import getUser
 
 import json
 import redis
-schedule_redis = redis.Redis(host="redis", port=6379, db=0)
+schedule_redis = redis.Redis(host="localhost", port=6379, db=0)
 
 def getSchedule(db_pool,token):
     data = getUser(token)
@@ -12,7 +12,8 @@ def getSchedule(db_pool,token):
             return "forbidan"
     user_id = data["data"]["id"]
     try:
-        cart_data = schedule_redis.get(user_id)
+        cache_key = f"member:{user_id}"
+        cart_data = schedule_redis.get(cache_key)
         if cart_data:
             cart = json.loads(cart_data)
             return cart
@@ -44,7 +45,8 @@ def getSchedule(db_pool,token):
                             "time": time,
                             "price": price
                         }}
-                        schedule_redis.set(user_id,json.dumps(info))
+                        cache_key = f"member:{user_id}"
+                        schedule_redis.set(cache_key,json.dumps(info))
                         return info
                     else:
                         return None

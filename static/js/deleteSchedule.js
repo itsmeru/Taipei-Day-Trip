@@ -15,6 +15,7 @@ async function deleteSchedule(user_id,attraction_id){
         }else{
             localStorage.removeItem("cart");
             window.location.reload();
+            return result;
         }    
     }catch(err){
         console.log("Error cart processing:",err.message);

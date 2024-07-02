@@ -1,7 +1,7 @@
 from fastapi import *
 from fastapi.exceptions import RequestValidationError
 from fastapi.staticfiles import StaticFiles
-from controller import attractionId, attractions, buildSchedule, getUser, mrts, signIn, signUp, getSchedule,deleteSchedule,tappay
+from controller import attractionId, attractions, buildSchedule, getUser, mrts, orders, signIn, signUp, getSchedule,deleteSchedule,getOrder
 from starlette_session import SessionMiddleware
 from fastapi.middleware.cors import CORSMiddleware
 from exceptions import *
@@ -42,7 +42,10 @@ app.include_router(getUser.router)
 app.include_router(buildSchedule.router)
 app.include_router(getSchedule.router)
 app.include_router(deleteSchedule.router)
-app.include_router(tappay.router)
+app.include_router(orders.router)
+app.include_router(getOrder.router)
+
+
 
 
 
