@@ -8,7 +8,7 @@ hr:first-of-type{
     width: 100vw;
     margin-top: 3.375rem;
 }
-hr:nth-of-type(2) {
+hr:nth-of-type(2),hr:nth-of-type(3),hr:nth-of-type(4) {
     max-width: 1200px;
 }
 

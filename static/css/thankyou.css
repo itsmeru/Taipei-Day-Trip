@@ -1,0 +1,188 @@
+body {
+    background: 
+        linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.6)),
+        url("/static/pic/taipei2.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed; 
+    margin: 0;
+    padding: 0;
+    
+}
+
+.form-container {
+    width: 500px;
+    margin: 0 auto;
+    
+}
+
+.form-row {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.form-row label {
+    margin-bottom: 20px;
+    font-weight: bold;
+    font-size: 28px;
+    color: #666666;  
+}
+
+.form-row input[type="text"] {
+    width: 100%;
+    height: 50px;
+    padding: 20px;
+    border: 1px solid #cccccc;
+    border-radius: 10px;
+    font-size: 16px;
+    outline: none;
+}
+
+.order-btn{
+    width: 100%;
+    height: 50px;
+    background-color: #4E6E62;
+    color: white;
+    border: none;
+    border-radius:10px;
+    font-size: 20px;
+    cursor: pointer;
+    margin: 15px 0;
+}
+
+.order-btn:hover {
+    background-color: #2A483A;
+}
+.result-container{
+    display: none;
+    color: 	#444444;
+    width: 1000px;
+    margin: 0 auto;
+
+}
+.info-container{
+    display: flex;
+    color: #53565C;
+    gap: 10px;
+}
+.headline{
+    text-align: center;
+    padding: 30px;
+    margin-bottom: 10px;
+    color: #666666;
+}
+.order-pic>img{
+    max-width: 100%;
+    height: 100%;
+    border-radius: 10px;
+}
+.order-pic{
+    flex:1;
+    max-height: 350px;
+    text-align: center;
+}
+.order-info{
+    flex:1;
+}
+.order-info>div{
+    padding: 14px;
+}
+.order-info > div:first-child{
+    font-weight: bold;
+    font-size: 18px;
+}
+.status-sucess{
+    font-size: 16px;
+    width: 70%;
+    text-align: center;
+    background-color:#75809C;
+    color: #F0FFFF;
+    border-radius: 5px;
+
+
+}
+.status-fail{
+    font-size: 16px;
+    cursor: pointer;
+    width: 70%;
+    text-align: center;
+    background-color:#3CB371;
+    color: #F0FFFF;
+    border-radius: 5px;
+}
+.status-fail:hover{
+    background-color: 	#2E8B57;
+}
+@media (min-width: 651px) and (max-width: 1200px) {
+    .result-container {
+        width: 90%;
+    }
+
+    .info-container {
+        flex-direction: row;
+    }
+    .status-sucess, .status-fail{
+        width: 70%;
+        font-size: 14px;
+    }
+    .order-info > div:first-child{
+        font-size: 16px;
+    }
+  
+  
+}
+
+
+@media (max-width: 650px) {
+    main{
+        width: 100%;
+    }
+    .form-container {
+        width: 100%;
+        margin: 10px auto;
+        padding: 10px;
+    }
+
+    .form-row label {
+        font-size: 24px;
+    }
+    
+    .form-row input[type="text"] {
+        height: 40px;
+        padding: 8px;
+        font-size: 14px;
+    }
+
+    .order-btn {
+        height: 40px;
+        font-size: 18px;
+    }
+
+    .result-container {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .info-container {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .headline {
+        padding: 20px;
+        font-size: 24px;
+    }
+
+    .status-sucess, .status-fail {
+        width: 100%;
+        font-size: 16px;
+    }
+    .order-pic>img{
+        min-width:  100%;
+        max-height: 350px;
+    }
+}

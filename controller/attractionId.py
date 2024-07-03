@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Request
-from fastapi.responses import JSONResponse
 from model.attractionId import getAttractionId
 from view.attractionId import renderAttractionId
+
 router = APIRouter()
 
 

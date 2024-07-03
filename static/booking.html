@@ -12,6 +12,9 @@
   <link rel="stylesheet" type="text/css" href="/static/css/index.css" />
   <link rel="stylesheet" type="text/css" href="/static/css/attraction.css" />
   <link rel="stylesheet" type="text/css" href="/static/css/booking.css" />
+ <script src="https://js.tappaysdk.com/sdk/tpdirect/v5.18.0"></script>
+ <script type="module" src="/static/js/controller/dom.js" defer></script>
+
   <script src="/static/js/account.js" defer></script>
   <script src="/static/js/tokenCkeck.js" defer></script>
   <script src="/static/js/getBook.js" defer></script>
@@ -21,6 +24,11 @@
   <script src="/static/js/bookInfo.js" defer></script>
   <script src="/static/js/booking.js" defer></script>
   <script src="/static/js/deleteSchedule.js" defer></script>
+  <script src="/static/js/getPrime.js" defer></script>
+  <script src="/static/js/searchSchedule.js" defer></script>
+  <script src="/static/js/burger.js" defer></script>
+
+
 
 
   <title>Booking</title>
@@ -71,52 +79,123 @@
       <div class="frame2">
         <div class="frame1">
           <button class="nav-btn body font-medium" onclick="bookInfo()">預定行程</button>
-          <button class="hidden nav-btn body font-medium " id="login-btn" onclick="openDialog('login-dialog')">登入/註冊</button> 
-          <button class="hidden nav-btn body font-medium " id="logout-btn" onclick="logout()">登出系統</button>     </div>  
+          <button class="nav-btn body font-medium" onclick="searchSchedule()">查詢行程</button>
+          <button class="hidden nav-btn body font-medium" id="login-btn" onclick="openDialog('login-dialog')">登入/註冊</button> 
+          <button class="hidden nav-btn body font-medium" id="logout-btn" onclick="logout()">登出系統</button> 
+        </div>  
       </div>
+      <div class="burger-menu" onclick="toggleMenu()">
+        <img src="/static/pic/burger.png" />
+      </div>
+    </div>
+    <div id="popupMenu" class="popup-menu">
+      <div class="close-icon" onclick="closeMenu()">X</div>
+      <button class="nav-btn body font-medium" onclick="bookInfo()">預定行程</button>
+      <button class="nav-btn body font-medium" onclick="searchSchedule()">查詢行程</button>
+      <button class="hidden nav-btn body font-medium" id="mobile-login-btn" onclick="openDialog('login-dialog')">登入/註冊</button> 
+      <button class="hidden nav-btn body font-medium" id="mobile-logout-btn" onclick="logout()">登出系統</button>
     </div>
   </nav>
   <hr class="hrFirst">
   <div class=" btn font-bold book-title"></div>
   <section class="book-section"></section>
   <hr>
+  <div id="loading">
+    <div class="spinner"></div>
+    <p>付款中，感謝您的耐心等候...</p>
+  </div>
   <div class="form-section">
     <div class="btn font-bold contact-info">您的聯絡資訊</div>
     <div class="form-row">
         <label for="name">聯絡姓名:</label>
-        <input type="text"  name="name" id="nameInput">
+        <input type="text"  name="name" id="nameInput" required>
     </div>
     <div class="form-row">
         <label for="email">聯絡信箱:</label>
-        <input type="text"  name="email" id="emailInput">
+        <input type="text"  name="email" id="emailInput" required>
     </div>
     <div class="form-row">
         <label for="phone">手機號碼:</label>
-        <input type="text" id="phone" name="phone">
+        <input type="text" id="phone" name="phone" required>
     </div>
     <div class="body font-bold info">請保持手機暢通，準時到達，導覽人員將用手機與您聯繫，務必留下正確的聯絡方式。</div>
 </div>
 <hr>
-
   <div class="form-section">
-      <div class="btn font-bold contact-info">信用卡付款資訊</div>
-      <div class="form-row">
-          <label for="cardNumber">卡片號碼:</label>
-          <input type="text" id="cardNumber" name="cardNumber">
-      </div>
-      <div class="form-row">
-          <label for="expiryDate">過期時間:</label>
-          <input type="text" id="expiryDate" name="expiryDate">
-      </div>
-      <div class="form-row">
-          <label for="cvv">驗證密碼:</label>
-          <input type="text" id="cvv" name="cvv">
-      </div>
+    <div class="btn font-bold contact-info">信用卡付款資訊</div>
+    <div class="form-row">
+      <label for="cardNumber">卡片號碼:</label>
+      <div class="cardStyle" id="cardNumber-container"></div>
+    </div>
+    <div class="form-row">
+      <label for="expiryDate">過期時間:</label>
+      <div class="cardStyle" id="expiryDate-container"></div>
+    </div>
+    <div class="form-row">
+      <label for="cvv">驗證密碼:</label>
+      <div class="cardStyle" id="cvv-container"></div>
+    </div>
   </div>
   <hr>
 
   <div class="total-price"></div>
   <footer class="down body font-bold">COPYRIGHT © 2021 台北一日遊</footer>
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+    try {
+        TPDirect.setupSDK(151574, "app_RLbQdcQtTvA8zk24OpLC8ykggWHi52PgyOHAe5kAiQdTpsFcsEx2UiUQmUQF", "sandbox");
+        console.log("TapPay SDK setup successful.");
+
+        TPDirect.card.setup({
+            fields: {
+                number: {
+                    element: '#cardNumber-container',
+                    placeholder: '**** **** **** ****'
+                },
+                expirationDate: {
+                    element: '#expiryDate-container',
+                    placeholder: 'MM / YY'
+                },
+                ccv: {
+                    element: '#cvv-container',
+                    placeholder: '後三碼'
+                }
+            }, styles: {
+              ".valid": {
+                  "color": "green"
+              },
+              ".invalid": {
+                  "color": "red"
+              },
+        
+              "@media screen and (max-width: 400px)": {
+                  "input": {
+                      "color": "orange"
+                  }
+              }
+          },
+            isMaskCreditCardNumber: true,
+            maskCreditCardNumberRange: {
+                beginIndex: 6,
+                endIndex: 11
+            }
+
+            
+        });
+
+        // 監聽輸入變化
+        TPDirect.card.onUpdate(function (update) {
+          // console.log("Update:", update);
+          updatePaymentButton();  
+        });
+
+    } catch (error) {
+        console.error("TapPay SDK setup error:", error);
+    }
+});
+  </script>
 
 </body>
 </html>

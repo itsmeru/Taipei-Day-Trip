@@ -5,15 +5,36 @@ let infos = document.querySelector(".infos");
 let transports = document.querySelector(".transport");
 let dots_container = document.querySelector(".dots-container");
 
-async function renderInfo(id){
+async function preloadImages(imageUrls) {
+  try {
+    let promises = imageUrls.map((imageUrl) => {
+      return new Promise((resolve, reject) => {
+        let img = new Image();
+        img.src = imageUrl;
+        img.onload = () => resolve(img);
+        img.onerror = (error) => reject(error);
+      });
+    });
+
+    // 等待所有圖片加載完成
+    await Promise.all(promises);
+    console.log("All images preloaded successfully.");
+  } catch (error) {
+    console.error("Failed to preload images:", error);
+  }
+}
+
+async function renderInfo(id) {
   let data = await spotPage(id);
-  let address = data["address"]
-  let category = data["category"]
-  let description = data["description"]
-  let mrt = data["MRT"]
-  let name = data["name"]
-  let transport = data["transpot"]
-  let images =  data["images"]
+  let address = data["address"];  
+  let category = data["category"];
+  let description = data["description"];
+  let mrt = data["MRT"];
+  let name = data["name"];
+  let transport = data["transpot"];
+  let images =  data["images"];
+
+  preloadImages(images);
 
   let name_mrt = document.createElement("div");
   name_mrt.className = "name-mrt dialog-title font-bold";
@@ -26,8 +47,8 @@ async function renderInfo(id){
   profile.insertBefore(name_mrt, profile.firstChild);
 
   for (let i = 0; i < images.length; i++) {
-    let img = document.createElement("img");
-    img.setAttribute("src", images[i]);
+    let img = new Image();
+    img.src = images[i];
     slider.appendChild(img);
     let circle = document.createElement("span");
     circle.className = "circle";
@@ -57,6 +78,7 @@ async function renderInfo(id){
   info3.textContent = transport;
   infos.appendChild(info3);
 }
+
 document.addEventListener("DOMContentLoaded", () => {
   let morning_radio = document.getElementById("morning");
   let afternoon_radio = document.getElementById("afternoon");

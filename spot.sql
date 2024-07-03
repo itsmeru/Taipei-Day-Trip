@@ -28,8 +28,9 @@ CREATE TABLE `account` (
   `password` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_email` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,8 +39,50 @@ CREATE TABLE `account` (
 
 LOCK TABLES `account` WRITE;
 /*!40000 ALTER TABLE `account` DISABLE KEYS */;
-INSERT INTO `account` VALUES (17,'ruru','$2b$12$RCeQglkIj4PoLvmQvAKmd.KnkHIsQ7mm.Q3iivs5lib7OHDI7K/3S','ruru@gmail.com','2024-06-18 14:03:15'),(18,'www','$2b$12$fbkJGJ9iY68gbxa7JAZGx.ubjC/TLP4cvX4vyLRbxoJSH7Ei27jtm','www@gmail.com','2024-06-18 14:41:29'),(19,'qqq','$2b$12$ivmIRyLUosST5jE.qwlIWOUF0h5y4BBCVcABD9sCnA0/jmwFo42l6','qqq@gmail.com','2024-06-18 15:47:14'),(20,'string','$2b$12$.fc.xtzjtHDiOQiNFRQrrOIa.ki9lIEcpZ1cgu2lnxnhHCPzU1wY6','user@example.com','2024-06-18 20:56:09');
+INSERT INTO `account` VALUES (17,'ruru','$2b$12$RCeQglkIj4PoLvmQvAKmd.KnkHIsQ7mm.Q3iivs5lib7OHDI7K/3S','ruru@gmail.com','2024-06-18 14:03:15'),(18,'www','$2b$12$fbkJGJ9iY68gbxa7JAZGx.ubjC/TLP4cvX4vyLRbxoJSH7Ei27jtm','www@gmail.com','2024-06-18 14:41:29'),(19,'qqq','$2b$12$ivmIRyLUosST5jE.qwlIWOUF0h5y4BBCVcABD9sCnA0/jmwFo42l6','qqq@gmail.com','2024-06-18 15:47:14'),(20,'string','$2b$12$.fc.xtzjtHDiOQiNFRQrrOIa.ki9lIEcpZ1cgu2lnxnhHCPzU1wY6','user@example.com','2024-06-18 20:56:09'),(21,'test','$2b$12$Sh20SFbJ.S/Z.S0B8mdmGew3Bw4gOc2qm8Xu6xFcLDSzW.DLhTLNq','test@gmail.com','2024-07-02 07:35:25');
 /*!40000 ALTER TABLE `account` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `orders`
+--
+
+DROP TABLE IF EXISTS `orders`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `orders` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `price` int NOT NULL,
+  `attraction_id` int NOT NULL,
+  `attraction_name` varchar(255) NOT NULL,
+  `attraction_address` varchar(255) NOT NULL,
+  `attraction_image` varchar(255) NOT NULL,
+  `trip_date` date NOT NULL,
+  `trip_time` varchar(20) NOT NULL,
+  `contact_name` varchar(100) NOT NULL,
+  `contact_email` varchar(100) NOT NULL,
+  `contact_phone` varchar(20) NOT NULL,
+  `status` enum('UNPAID','PAID','FAILED') DEFAULT 'UNPAID',
+  `order_number` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `paid_at` timestamp NULL DEFAULT NULL,
+  `cancelled_at` timestamp NULL DEFAULT NULL,
+  `completed_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `order_number` (`order_number`)
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `orders`
+--
+
+LOCK TABLES `orders` WRITE;
+/*!40000 ALTER TABLE `orders` DISABLE KEYS */;
+INSERT INTO `orders` VALUES (24,17,2000,21,'台北101','臺北市信義區信義路5段7號','https://www.travel.taipei/d_upload_ttn/sceneadmin/pic/11000361.jpg','2024-07-16','morning','ruru','ruru@gmail.com','0938285280','PAID','D20240702OEfsdG','2024-07-02 08:25:47','2024-07-02 08:26:54','2024-07-02 08:26:53',NULL,NULL),(25,17,2000,14,'中正紀念堂','臺北市中正區中山南路21號','https://www.travel.taipei/d_upload_ttn/sceneadmin/pic/11000375.jpg','2024-07-17','morning','ruru','ruru@gmail.com','0938285280','PAID','D20240702fNwXb0','2024-07-02 08:32:46','2024-07-02 08:32:47','2024-07-02 08:32:47',NULL,NULL),(26,17,2000,9,'地熱谷','臺北市北投區中山路','https://www.travel.taipei/d_upload_ttn/sceneadmin/pic/11003993.jpg','2024-07-24','morning','ruru','ruru@gmail.com','0938285280','FAILED','D20240702t5nHBL','2024-07-02 08:38:07','2024-07-02 08:38:08',NULL,'2024-07-02 08:38:08',NULL);
+/*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -57,11 +100,11 @@ CREATE TABLE `schedule` (
   `time` varchar(255) NOT NULL,
   `price` int NOT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_userId` (`user_id`),
   KEY `attractionId` (`attraction_id`),
-  KEY `user_id` (`user_id`),
   CONSTRAINT `schedule_ibfk_1` FOREIGN KEY (`attraction_id`) REFERENCES `spots` (`id`),
   CONSTRAINT `schedule_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `account` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=118 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -70,7 +113,7 @@ CREATE TABLE `schedule` (
 
 LOCK TABLES `schedule` WRITE;
 /*!40000 ALTER TABLE `schedule` DISABLE KEYS */;
-INSERT INTO `schedule` VALUES (22,17,3,'2024-06-18','afternoon',2500),(23,17,6,'2024-06-18','morning',2000),(24,17,3,'2024-06-18','morning',2000),(25,17,4,'2024-06-11','afternoon',2500),(26,17,4,'2024-06-11','morning',2000),(27,17,1,'2024-06-21','afternoon',2500);
+INSERT INTO `schedule` VALUES (107,21,28,'2024-07-25','morning',2000),(117,17,9,'2024-07-24','morning',2000);
 /*!40000 ALTER TABLE `schedule` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -143,4 +186,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-06-21 11:46:19
+-- Dump completed on 2024-07-02 16:41:04

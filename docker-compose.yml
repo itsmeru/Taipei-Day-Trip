@@ -6,22 +6,21 @@ services:
       - "8000:8000"
     environment:
       - MYSQL_HOST=mydb
-      - MYSQL_PASSWORD=betty520
-      - JWT_SECRET=ruruisback
+      - MYSQL_PASSWORD=@Rb1040207
+      - JWT_SECRET=donttellmewhattodo
       - ALGORITHM=HS256
     depends_on:
       db:
         condition: service_healthy
     volumes:
-      # - /Users/ruru/Desktop/taipei-day-trip:/user/src/app
-      - /home/ubuntu/Stage-2-Task/app.py:/app/app.py
+      - /home/ubuntu/Stage-2-Tasks:/app
 
   db:
     image: mysql:latest
     container_name: mydb
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: "betty520"
+      MYSQL_ROOT_PASSWORD: "@Rb1040207"
     ports:
       - "3306:3306"
     healthcheck:
@@ -29,9 +28,12 @@ services:
       start_period: 5s
       interval: 5s
       timeout: 5s
-      retries: 55
+      retries: 10
     volumes:
-      - /Users/ruru/Desktop/taipei-day-trip-db:/var/lib/mysql
-      # - /home/ubuntu/Stage-2-Task/spot.sql:/docker-entrypoint-initdb.d/spot.sql
-      # - /Users/ruru/Desktop/taipei-day-trip/spot.sql:/docker-entrypoint-initdb.d/spot.sql
-      # - ./my.cnf:/etc/mysql/conf.d/my.cnf
+      - /home/ubuntu/Stage-2-Task/mysql:/var/lib/mysql
+      - /home/ubuntu/Stage-2-Task/spot.sql:/docker-entrypoint-initdb.d/spot.sql
+  redis:
+      image: redis:latest
+      container_name: myredis
+      ports:
+        - "6379:6379"
