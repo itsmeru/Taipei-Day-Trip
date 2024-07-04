@@ -4,11 +4,8 @@ services:
     image: itsmeru/taipeidaytrip:latest
     ports:
       - "8000:8000"
-    environment:
-      - MYSQL_HOST=mydb
-      - MYSQL_PASSWORD=@Rb1040207
-      - JWT_SECRET=donttellmewhattodo
-      - ALGORITHM=HS256
+    env_file:
+      - .env
     depends_on:
       db:
         condition: service_healthy
@@ -20,11 +17,11 @@ services:
     container_name: mydb
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: "@Rb1040207"
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
     ports:
       - "3306:3306"
     healthcheck:
-      test: mysqladmin ping -h 127.0.0.1 -u root --password=betty520
+      test: mysqladmin ping -h 127.0.0.1 -u root --password="${MYSQL_ROOT_PASSWORD}"
       start_period: 5s
       interval: 5s
       timeout: 5s
@@ -32,8 +29,9 @@ services:
     volumes:
       - /home/ubuntu/Stage-2-Task/mysql:/var/lib/mysql
       - /home/ubuntu/Stage-2-Task/spot.sql:/docker-entrypoint-initdb.d/spot.sql
+
   redis:
-      image: redis:latest
-      container_name: myredis
-      ports:
-        - "6379:6379"
+    image: redis:latest
+    container_name: myredis
+    ports:
+      - "6379:6379"
