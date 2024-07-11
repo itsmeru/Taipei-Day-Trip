@@ -5,24 +5,24 @@ let infos = document.querySelector(".infos");
 let transports = document.querySelector(".transport");
 let dots_container = document.querySelector(".dots-container");
 
-async function preloadImages(imageUrls) {
-  try {
-    let promises = imageUrls.map((imageUrl) => {
-      return new Promise((resolve, reject) => {
-        let img = new Image();
-        img.src = imageUrl;
-        img.onload = () => resolve(img);
-        img.onerror = (error) => reject(error);
-      });
-    });
+// async function preloadImages(imageUrls) {
+//   try {
+//     let promises = imageUrls.map((imageUrl) => {
+//       return new Promise((resolve, reject) => {
+//         let img = new Image();
+//         img.src = imageUrl;
+//         img.onload = () => resolve(img);
+//         img.onerror = (error) => reject(error);
+//       });
+//     });
 
-    // 等待所有圖片加載完成
-    await Promise.all(promises);
-    console.log("All images preloaded successfully.");
-  } catch (error) {
-    console.error("Failed to preload images:", error);
-  }
-}
+//     // 等待所有圖片加載完成
+//     await Promise.all(promises);
+//     console.log("All images preloaded successfully.");
+//   } catch (error) {
+//     console.error("Failed to preload images:", error);
+//   }
+// }
 
 async function renderInfo(id) {
   let data = await spotPage(id);
@@ -34,7 +34,7 @@ async function renderInfo(id) {
   let transport = data["transpot"];
   let images =  data["images"];
 
-  preloadImages(images);
+  // preloadImages(images);
 
   let name_mrt = document.createElement("div");
   name_mrt.className = "name-mrt dialog-title font-bold";

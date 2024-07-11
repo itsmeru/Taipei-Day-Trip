@@ -1,18 +1,16 @@
 import json
 import redis
-import time
-
+import os
 spots_redis = redis.Redis(host="redis", port=6379, db=0)
 
+CLOUDFRONT_DOMAIN = os.getenv('CLOUDFRONT_DOMAIN')
+                    
 def getAttractions(db_pool, start_index, items_per_page, keyword):
     try:
         cache_key = f"attractions:{keyword}:{start_index}:{items_per_page}"
         
-        # Measure time to get data from Redis
-        start = time.time()
         redis_data = spots_redis.get(cache_key)
-        end = time.time()
-        print("Redis 取得資料時間:", end - start)
+      
         
         if redis_data:
             data = json.loads(redis_data)
@@ -30,22 +28,34 @@ def getAttractions(db_pool, start_index, items_per_page, keyword):
                 
                 total_page = total_num / 12
                 
-                cursor.execute("SELECT * FROM spots WHERE MRT = %s OR name LIKE %s LIMIT %s, %s", (keyword, '%' + keyword + '%', start_index, items_per_page))
-                results = cursor.fetchall()
+                cursor.execute("""
+                               SELECT spots.*,
+                                    GROUP_CONCAT(CONCAT(%s, '/', SUBSTRING_INDEX(spot_imgs.images, '/', -1)) SEPARATOR ',') as image_urls
+                                FROM spots 
+                                LEFT JOIN spot_imgs ON spots.id = spot_imgs.img_id
+                                WHERE spots.MRT = %s OR spots.name LIKE %s
+                                GROUP BY spots.id
+                                LIMIT %s, %s""",
+                                (CLOUDFRONT_DOMAIN,keyword, '%' + keyword + '%', start_index, items_per_page))
                 
+                results = cursor.fetchall()
                 for result in results:
-                    id = result["id"]
+                    if result["image_urls"]:
+                        result["images"] = result["image_urls"].split(',')
+                    else:
+                        result["images"] = []
+                # for result in results:
+                #     id = result["id"]
 
-                    cursor.execute("SELECT images FROM spot_imgs WHERE img_id = %s", (id,))
-                    img_urls = [row["images"] for row in cursor.fetchall()]
-                    
-                    result["images"] = img_urls
+                #     cursor.execute("SELECT images FROM spot_imgs WHERE img_id = %s", (id,))
+                #     img_urls = [f"{CLOUDFRONT_DOMAIN}/{row["images"].split('/')[-1]}" for row in cursor.fetchall()]
+
+                #     result["images"] = img_urls
                 
                 data = {"results": results, "total_page": total_page}
                 
-                spots_redis.set(cache_key, json.dumps(data))
+                spots_redis.set(cache_key, json.dumps(data), ex=3600)
             
-                
                 return data
     except Exception as e:
         print(f"Unhandled exception: {e}")

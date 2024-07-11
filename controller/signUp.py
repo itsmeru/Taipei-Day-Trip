@@ -13,9 +13,9 @@ class CheckAccount(BaseModel):
 
 @router.post("/api/user")
 async def signUp(request:Request,user:CheckAccount):
-  name = user.name
-  email = user.email
-  password = hash_password(user.password)
+  name = user["name"]
+  email = user["email"]
+  password = hash_password(user["password"])
 
   db_pool = request.state.db_pool.get("spot")
   results = getSignUp(db_pool, name, email, password)

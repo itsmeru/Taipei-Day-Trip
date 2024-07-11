@@ -1,7 +1,7 @@
 from fastapi import *
 from fastapi.exceptions import RequestValidationError
 from fastapi.staticfiles import StaticFiles
-from controller import attractionId, attractions, buildSchedule, getUser, mrts, orders, signIn, signUp, getSchedule,deleteSchedule,getOrder
+from controller import attractionId, attractions, buildSchedule, getUser, mrts, orders, signIn, signUp, getSchedule,deleteSchedule,getOrder,google
 from starlette_session import SessionMiddleware
 from fastapi.middleware.cors import CORSMiddleware
 from exceptions import *
@@ -16,13 +16,13 @@ app.middleware("http")(db_connection)
 app.add_exception_handler(RequestValidationError, validation_exception_handler)
 app.add_exception_handler(HTTPException, custom_http_exception_handler)
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=["*"],
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
 
 # app.add_middleware(
 #     SessionMiddleware,
@@ -44,6 +44,7 @@ app.include_router(getSchedule.router)
 app.include_router(deleteSchedule.router)
 app.include_router(orders.router)
 app.include_router(getOrder.router)
+app.include_router(google.router)
 
 
 

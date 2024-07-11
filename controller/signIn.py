@@ -12,8 +12,8 @@ class CheckAccount(BaseModel):
 
 @router.put("/api/user/auth")
 async def signIn(request:Request,user:CheckAccount):
-    email = user.email
-    password = user.password
+    password = user["password"]
+    email = user["email"]
     db_pool = request.state.db_pool.get("spot")
     results = getSignIn(db_pool, email, password)
     return renderSignIn(results)

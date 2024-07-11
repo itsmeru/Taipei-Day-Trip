@@ -106,6 +106,7 @@ button.hidden{
   align-items: center; 
 }
 
+
 dialog{
   width: 340px;
   border: 0;
@@ -117,7 +118,10 @@ dialog{
   left: 50%;
   transform: translate(-50%, 0);
 }
-
+#g_id_onload{
+  margin-top: 15px;
+  
+}
 .dialog-actions {
   position: absolute;
   top: 20px; 

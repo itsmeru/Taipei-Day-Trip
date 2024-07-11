@@ -25,7 +25,7 @@ def getSignIn(db_pool, email, password):
                         jwt_secret = os.environ.get("JWT_SECRET")
                         algo = os.environ.get("ALGORITHM")
                         token = jwt.encode(token_payload, jwt_secret, algorithm=algo,headers=header)
-                        data = {"token": token}
+                        data = {"token": token,"id":existing_user["id"]}
                         return data
                     return "pwdfail"
                 return "userfail"

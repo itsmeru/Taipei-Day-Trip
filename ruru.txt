@@ -1,0 +1,38 @@
+import json
+import boto3
+
+s3_client = boto3.client('s3')
+cloudfront_domain = "https://d3txun86ojaujf.cloudfront.net  # 替換為你的 CloudFront Domain
+
+def lambda_handler(event, context):
+    image_url = event.get('image_url')
+    image_key = event.get('image_key')
+    bucket_name = 'my-first-s3db'
+    
+    if not image_url or not image_key:
+        return {
+            'statusCode': 400,
+            'body': json.dumps('image_url and image_key are required')
+        }
+    
+    try:
+        # 下載圖片
+        response = http.request('GET', image_url, timeout=urllib3.Timeout(connect=2.0, read=4.0))
+        
+        if response.status != 200:
+            raise Exception(f"Failed to download image from {image_url}")
+        
+        # 上傳圖片到 S3
+        s3_client.put_object(Bucket=bucket_name, Key=image_key, Body=response.data, ContentType='image/jpeg')
+        
+        # 返回 CDN 圖片 URL
+        cdn_url = f"{cloudfront_domain}/{image_key}"
+        return {
+            'statusCode': 200,
+            'body': json.dumps({'cdn_url': cdn_url})
+        }
+    except Exception as e:
+        return {
+            'statusCode': 500,
+            'body': json.dumps(f"Error: {str(e)}")
+        }
