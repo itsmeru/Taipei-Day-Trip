@@ -34,14 +34,14 @@ async def upload_file(request:Request,text: str = Form(...),picture: UploadFile 
     try:
         mime_type, _ = mimetypes.guess_type(picture.filename)
         if mime_type is None:
-            mime_type = 'application/octet-stream'
+            mime_type = "application/octet-stream"
         config = TransferConfig(
             multipart_threshold=1024 * 50,  # 50 MB
             multipart_chunksize=1024 * 50   # 50 MB
         )
         s3_key = f"images/{picture.filename}"
-        s3_client.upload_fileobj(picture.file, bucket_name, s3_key,ExtraArgs={'ContentType': mime_type}, Config=config)
-        image_url = f"{os.getenv("CLOUDFRONT_DOMAIN")}/{s3_key}"
+        s3_client.upload_fileobj(picture.file, bucket_name, s3_key,ExtraArgs={"ContentType": mime_type}, Config=config)
+        image_url = f"{os.getenv('CLOUDFRONT_DOMAIN')}/{s3_key}"
 
         try:
             with db_pool.get_connection() as con:
