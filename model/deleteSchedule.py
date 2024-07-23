@@ -1,8 +1,7 @@
 from model.getUser import getUser
 import redis
-schedule_redis = redis.Redis(host="redis", port=6379, db=0)
 
-def getDeleteSchedule(db_pool,user_id,attraction_id,token):
+def getDeleteSchedule(db_pool,user_id,attraction_id,token,schedule_redis):
     data = getUser(token)
     if data["data"] == None or data["data"]["id"] != user_id:
             return "forbidan"

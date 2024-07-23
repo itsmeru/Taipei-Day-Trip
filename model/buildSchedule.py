@@ -1,9 +1,6 @@
 from http.client import HTTPException
 
-import redis
-schedule_redis = redis.Redis(host="redis", port=6379, db=0)
-
-def getBookInfo(db_pool,cart,tokenData):
+def getBookInfo(db_pool,cart,tokenData,schedule_redis):
     try:
         token = tokenData["data"]
         if token is None:

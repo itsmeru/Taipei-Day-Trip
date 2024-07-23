@@ -8,7 +8,9 @@ async def attractions(request: Request, page: int = Query(0, description="要取
     items_per_page = 12
     start_index = page * items_per_page
     db_pool = request.state.db_pool.get("spot")
-    data = getAttractions(db_pool,start_index, items_per_page, keyword)
+    redis_pool = request.state.redis_pool
+
+    data = getAttractions(db_pool,start_index, items_per_page, keyword,redis_pool)
     results = data["results"]
     total_page = data["total_page"]
     return renderAttractions(results, page, total_page)

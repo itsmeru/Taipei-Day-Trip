@@ -25,7 +25,9 @@ async def booking(request:Request,book:Booking,token: str= Depends(oauth2_scheme
         "price" : book.price
     }
     db_pool = request.state.db_pool.get("spot")
-    result = getBookInfo(db_pool,cart,tokenData)
+    redis_pool = request.state.redis_pool
+
+    result = getBookInfo(db_pool,cart,tokenData,redis_pool)
     return renderBookInfo(result)
 
    

@@ -1,17 +1,14 @@
 import json
-import redis
 import os 
-attraction_redis = redis.Redis(host="redis", port=6379, db=0)
 
 CLOUDFRONT_DOMAIN = os.getenv('CLOUDFRONT_DOMAIN')
 
-def getAttractionId(db_pool, attractionId):
+def getAttractionId(db_pool, attractionId,attraction_redis):
     try:
         cache_key = f"attractionID:{attractionId}"
         redis_data = attraction_redis.get(cache_key)
         if redis_data:
             data = json.loads(redis_data)
-            print("SUCESSSS")
             return data
         with db_pool.get_connection() as con:
             with con.cursor(dictionary=True) as cursor:

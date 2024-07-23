@@ -1,7 +1,7 @@
 from fastapi import *
 from fastapi.exceptions import RequestValidationError
 from fastapi.staticfiles import StaticFiles
-from controller import attractionId, attractions, buildSchedule, getUser, mrts, orders, signIn, signUp, getSchedule,deleteSchedule,getOrder,google
+from controller import attractionId, attractions, buildSchedule, getUser, mrts, orders, signIn, signUp, getSchedule,deleteSchedule,getOrder,google,upload,showPost
 from starlette_session import SessionMiddleware
 from fastapi.middleware.cors import CORSMiddleware
 from exceptions import *
@@ -13,6 +13,8 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 app.middleware("http")(db_connection)
+app.middleware("http")(redis_connection)
+
 app.add_exception_handler(RequestValidationError, validation_exception_handler)
 app.add_exception_handler(HTTPException, custom_http_exception_handler)
 
@@ -31,7 +33,8 @@ app.add_exception_handler(HTTPException, custom_http_exception_handler)
 #     cookie_name="session_data",    
 # )
 
-
+app.include_router(upload.router)
+app.include_router(showPost.router)
 app.include_router(attractions.router)
 app.include_router(mrts.router)
 app.include_router(staticPages.router)

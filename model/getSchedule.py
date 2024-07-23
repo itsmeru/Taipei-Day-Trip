@@ -3,10 +3,8 @@ from model.attractionId import getAttractionId
 from model.getUser import getUser
 
 import json
-import redis
-schedule_redis = redis.Redis(host="redis", port=6379, db=0)
 
-def getSchedule(db_pool,token):
+def getSchedule(db_pool,token,schedule_redis):
     data = getUser(token)
     if data == "error" or data is None:
             return "forbidan"

@@ -15,7 +15,8 @@ class DeleteBooking(BaseModel):
 @router.delete("/api/booking")
 async def delBooking(request:Request,booking: DeleteBooking,token: str= Depends(oauth2_scheme)):
     db_pool = request.state.db_pool.get("spot")
+    redis_pool = request.state.redis_pool
     user_id = booking.user_id
     attraction_id = booking.attraction_id
-    results = getDeleteSchedule(db_pool,user_id,attraction_id,token)
+    results = getDeleteSchedule(db_pool,user_id,attraction_id,token,redis_pool)
     return renderDeleteSchedule(results)

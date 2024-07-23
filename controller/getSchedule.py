@@ -9,7 +9,8 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/user/auth")
 
 @router.get("/api/booking")
 def Schedule(request:Request,token: str= Depends(oauth2_scheme)):
-    print("IN",token)
     db_pool = request.state.db_pool.get("spot")
-    result = getSchedule(db_pool,token)
+    redis_pool = request.state.redis_pool
+
+    result = getSchedule(db_pool,token,redis_pool)
     return renderSchedule(result)

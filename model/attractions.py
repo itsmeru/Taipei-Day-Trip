@@ -1,11 +1,9 @@
 import json
-import redis
 import os
-spots_redis = redis.Redis(host="redis", port=6379, db=0)
 
 CLOUDFRONT_DOMAIN = os.getenv('CLOUDFRONT_DOMAIN')
                     
-def getAttractions(db_pool, start_index, items_per_page, keyword):
+def getAttractions(db_pool, start_index, items_per_page, keyword,spots_redis):
     try:
         cache_key = f"attractions:{keyword}:{start_index}:{items_per_page}"
         

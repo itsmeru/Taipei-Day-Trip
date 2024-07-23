@@ -36,3 +36,44 @@ def lambda_handler(event, context):
             'statusCode': 500,
             'body': json.dumps(f"Error: {str(e)}")
         }
+
+
+
+        services:
+  app:
+    build: .
+    image: itsmeru/taipeidaytrip:latest
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - /home/ubuntu/Stage-2-Tasks:/app
+
+  db:
+    image: mysql:latest
+    container_name: mydb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u root --password="${MYSQL_ROOT_PASSWORD}"
+      start_period: 5s
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - /home/ubuntu/Stage-2-Task/mysql:/var/lib/mysql
+      - /home/ubuntu/Stage-2-Task/spot.sql:/docker-entrypoint-initdb.d/spot.sql
+
+  redis:
+    image: redis:latest
+    container_name: myredis
+    ports:
+      - "6379:6379"
+
