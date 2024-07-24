@@ -4,10 +4,13 @@ from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordBearer
 import boto3
 import os
-from dotenv import load_dotenv
 from pydantic import BaseModel
-from model.getUser import getUser
 from boto3.s3.transfer import TransferConfig
+import uuid
+
+from model.getUser import getUser
+from dotenv import load_dotenv
+
 
 load_dotenv()
 router = APIRouter()
@@ -39,8 +42,9 @@ async def upload_file(request:Request,text: str = Form(...),picture: UploadFile 
             multipart_threshold=1024 * 50,  # 50 MB
             multipart_chunksize=1024 * 50   # 50 MB
         )
-        s3_key = f"images/{picture.filename}"
-        s3_client.upload_fileobj(picture.file, bucket_name, s3_key,ExtraArgs={"ContentType": mime_type}, Config=config)
+        unique_filename = f"{uuid.uuid4()}{os.path.splitext(picture.filename)[1]}"
+        s3_key = f"images/{unique_filename}"
+        s3_client.upload_fileobj(picture.file, bucket_name, s3_key, ExtraArgs={"ContentType": mime_type}, Config=config)
         image_url = f"{os.getenv('CLOUDFRONT_DOMAIN')}/{s3_key}"
 
         try:

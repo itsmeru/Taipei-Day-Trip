@@ -12,3 +12,4 @@ httpx
 boto3
 google-auth
 python-dotenv
+uuid
