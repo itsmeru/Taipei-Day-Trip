@@ -9,10 +9,10 @@ from boto3.s3.transfer import TransferConfig
 import uuid
 
 from model.getUser import getUser
-from dotenv import load_dotenv
+from models import Comment
+from db import get_db
+from sqlalchemy.ext.asyncio import AsyncSession
 
-
-load_dotenv()
 router = APIRouter()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/user/auth")
 
@@ -28,12 +28,13 @@ class checkFile(BaseModel):
     text: str  
     picture: UploadFile
 
+
 @router.post("/api/upload")
-async def upload_file(request:Request,text: str = Form(...),picture: UploadFile = File(...),token: str= Depends(oauth2_scheme)):
+async def upload_file(text: str = Form(...),picture: UploadFile = File(...),token: str= Depends(oauth2_scheme), db: AsyncSession = Depends(get_db)):
     tokenData = getUser(token)
     user_id = tokenData["data"]["id"]
     user_name = tokenData["data"]["name"]
-    db_pool = request.state.db_pool.get("board")
+
     try:
         mime_type, _ = mimetypes.guess_type(picture.filename)
         if mime_type is None:
@@ -47,16 +48,15 @@ async def upload_file(request:Request,text: str = Form(...),picture: UploadFile 
         s3_client.upload_fileobj(picture.file, bucket_name, s3_key, ExtraArgs={"ContentType": mime_type}, Config=config)
         image_url = f"{os.getenv('CLOUDFRONT_DOMAIN')}/{s3_key}"
 
-        try:
-            with db_pool.get_connection() as con:
-                with con.cursor() as cursor:
-                    cursor.execute(
-                        "INSERT INTO comments (user_id, user_name, content, image_url) VALUES (%s, %s, %s, %s)", 
-                        (user_id, user_name, text, image_url)
-                    )
-                    con.commit()
-            return JSONResponse(content={"success": True})
-        except Exception as e:
-            print(e)
+        new_comment = Comment(
+            user_id=user_id,
+            user_name=user_name,
+            content=text,
+            image_url=image_url
+        )
+        db.add(new_comment)
+        await db.commit()
+        
+        return JSONResponse(content={"success": True})
     except Exception as e:
         return JSONResponse(content={"success": False, "message": str(e)}, status_code=500)

@@ -21,15 +21,15 @@
    
 }
 .container{
-    width: 250px;
-    height: 250px;
+    width: 350px;
+    height: 350px;
     border: 1px solid black;
     text-align: center;
     margin: 20px;
 }
 .post-img{
-    width: 200px;
-    height: 150px;
+    width: 250px;
+    height: 250px;
     margin-top: 15px;
     object-fit: cover;
 }

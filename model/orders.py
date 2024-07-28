@@ -1,96 +1,82 @@
-import requests
 from datetime import datetime
-from model.getUser import getUser
+from sqlalchemy import select
 import httpx
 
-async def getOrders(db_pool, token, bookInfo, order_data):
+from model.getUser import getUser
+from models import Order
+
+async def getOrders(db, token: str, bookInfo, order_data):
     tokenData = getUser(token)
     if tokenData == "error" or tokenData is None:
-            return "forbidan"
+        return "forbidan"
     
     user_id = tokenData["data"]["id"]
+    
+    result = await db.execute(
+            select(Order).filter(Order.user_id == user_id, Order.status.in_(['UNPAID', 'FAILED']))
+        )
+    existing_order = result.scalars().first()
 
-    with db_pool.get_connection() as con:
-        with con.cursor(dictionary=True) as cursor:
-            cursor.execute("SELECT id FROM orders WHERE user_id = %s AND (status = 'UNPAID' OR status = 'FAILED')", (user_id,))
-            existing_order = cursor.fetchone()
-        
-            if existing_order:
-                cursor.execute("UPDATE orders SET price = %s, attraction_id = %s, attraction_name = %s, attraction_address = %s, attraction_image = %s, trip_date = %s, trip_time = %s, contact_name = %s, contact_email = %s, contact_phone = %s WHERE id = %s", (
-                        bookInfo.order.price,
-                        bookInfo.order.trip.attraction.id,
-                        bookInfo.order.trip.attraction.name,
-                        bookInfo.order.trip.attraction.address,
-                        bookInfo.order.trip.attraction.image,
-                        bookInfo.order.trip.date,
-                        bookInfo.order.trip.time,
-                        bookInfo.order.contact.name,
-                        bookInfo.order.contact.email,
-                        bookInfo.order.contact.phone,
-                        existing_order["id"],
-                ))
-                con.commit()
-                order_id = existing_order["id"]
-            else:
-                cursor.execute("INSERT INTO orders (user_id, price, attraction_id, attraction_name, attraction_address, attraction_image, trip_date, trip_time, contact_name, contact_email, contact_phone) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (
-                        user_id,
-                        bookInfo.order.price,
-                        bookInfo.order.trip.attraction.id,
-                        bookInfo.order.trip.attraction.name,
-                        bookInfo.order.trip.attraction.address,
-                        bookInfo.order.trip.attraction.image,
-                        bookInfo.order.trip.date,
-                        bookInfo.order.trip.time,
-                        bookInfo.order.contact.name,
-                        bookInfo.order.contact.email,
-                        bookInfo.order.contact.phone,
-                ))
-                con.commit()
-                order_id = cursor.lastrowid
-                data = {
-                    "user_id": user_id,
-                    "price": bookInfo.order.price,
-                    "attraction_id": bookInfo.order.trip.attraction.id,
-                    "attraction_name": bookInfo.order.trip.attraction.name,
-                    "attraction_address": bookInfo.order.trip.attraction.address,
-                    "attraction_image": bookInfo.order.trip.attraction.image,
-                    "trip_date": bookInfo.order.trip.date,
-                    "trip_time": bookInfo.order.trip.time,
-                    "contact_name": bookInfo.order.contact.name,
-                    "contact_email": bookInfo.order.contact.email,
-                    "contact_phone": bookInfo.order.contact.phone,
-                    "status": "UNPAID"
+    if existing_order:
+        existing_order.price = bookInfo.order.price
+        existing_order.attraction_id = bookInfo.order.trip.attraction.id
+        existing_order.attraction_name = bookInfo.order.trip.attraction.name
+        existing_order.attraction_address = bookInfo.order.trip.attraction.address
+        existing_order.attraction_image = bookInfo.order.trip.attraction.image
+        existing_order.trip_date = bookInfo.order.trip.date
+        existing_order.trip_time = bookInfo.order.trip.time
+        existing_order.contact_name = bookInfo.order.contact.name
+        existing_order.contact_email = bookInfo.order.contact.email
+        existing_order.contact_phone = bookInfo.order.contact.phone
+        order_id = existing_order.id
+    else:
+        new_order = Order(
+            user_id=user_id,
+            price=bookInfo.order.price,
+            attraction_id=bookInfo.order.trip.attraction.id,
+            attraction_name=bookInfo.order.trip.attraction.name,
+            attraction_address=bookInfo.order.trip.attraction.address,
+            attraction_image=bookInfo.order.trip.attraction.image,
+            trip_date=bookInfo.order.trip.date,
+            trip_time=bookInfo.order.trip.time,
+            contact_name=bookInfo.order.contact.name,
+            contact_email=bookInfo.order.contact.email,
+            contact_phone=bookInfo.order.contact.phone,
+            status='UNPAID'
+        )
+        db.add(new_order)
+        await db.commit()
+        order_id = new_order.id
+
+    order_status, request_time, data = await sendPrime(order_data, token)
+    print(order_status,data)
+    
+    if order_status == "API error":
+        await updateOrderStatus(db, order_id, "FAILED", order_number=data["order_number"], cancelled_at=request_time)
+        payment_result = {
+            "data": {
+                "number": data["order_number"],
+                "payment": {
+                    "status": data["status"],
+                    "message": "付款失敗"
                 }
-              
-        
-            order_status, request_time, data = await sendPrime(order_data, token)
-            
-            if order_status == "API error":
-                updateOrderStatus(con, cursor, order_id, "FAILED",order_number=data["order_number"] ,cancelled_at=request_time)
-                payment_result = {
-                    "data": {
-                        "number": data["order_number"],
-                        "payment": {
-                            "status": data["status"],
-                            "message": "付款失敗"
-                        }
-                    }
+            }
+        }
+        return {"error": False, "payment_result": payment_result}
+    elif order_status in ["request error", "error"]:
+        return {"error": True, "data": data}
+    else:
+        await updateOrderStatus(db, order_id, "PAID", order_number=data["order_number"], paid_at=request_time)
+        payment_result = {
+            "data": {
+                "number": data["order_number"],
+                "payment": {
+                    "status": data["status"],
+                    "message": "付款成功"
                 }
-                return {"error":False,"payment_result":payment_result}
-            elif order_status in ["request error","error"]:
-                return {"error":True,"data":data}
-            else:
-                updateOrderStatus(con, cursor, order_id, "PAID", order_number=data["order_number"], paid_at=request_time)
-                payment_result= {
-                    "data": {
-                        "number": data["order_number"],
-                        "payment": {
-                            "status": data["status"],
-                            "message": "付款成功"
-                        }
-                    }
-                }
-                return {"error": False, "payment_result": payment_result}
+            }
+        }
+        return {"error": False, "payment_result": payment_result}
 
 async def sendPrime(order_data, token):
     tap_pay_url = "https://sandbox.tappaysdk.com/tpc/payment/pay-by-prime"
@@ -99,9 +85,9 @@ async def sendPrime(order_data, token):
         "Authorization": f"{token}",
         "x-api-key": "partner_71JD0IlN4Td4dKlAno18sKBDji9PScQ0oM0a0zkj7ZNpNxiSiG3hFzLm",
     }
-    
+    request_time = datetime.now()
     try:
-        request_time = datetime.now()
+        
         async with httpx.AsyncClient() as client:
             response = await client.post(tap_pay_url, json=order_data, headers=headers)
             response.raise_for_status()
@@ -122,12 +108,20 @@ async def sendPrime(order_data, token):
         data = {"error": True, "status": http_err.response.status_code, "message": error_message}
         print(f"HTTP error occurred: {http_err}")
         return "request error", request_time, data
-    
+
     except Exception as err:
         error_message = str(err)
         data = {"error": True, "status": 500, "message": error_message}
         print(f"Other error occurred: {err}")
         return "error", request_time, data
-def updateOrderStatus(con, cursor, order_id, status, order_number=None, paid_at=None, cancelled_at=None, completed_at=None):
-    cursor.execute("UPDATE orders SET status = %s, order_number = %s, paid_at = %s, cancelled_at = %s, completed_at = %s WHERE id = %s", (status, order_number, paid_at, cancelled_at, completed_at, order_id))
-    con.commit()
+
+async def updateOrderStatus(db, order_id: int, status: str, order_number: str = None, paid_at: datetime = None, cancelled_at: datetime = None, completed_at: datetime = None):
+    result = await db.execute(select(Order).filter(Order.id == order_id))
+    order = result.scalars().first()
+    if order:
+        order.status = status
+        order.order_number = order_number
+        order.paid_at = paid_at
+        order.cancelled_at = cancelled_at
+        order.completed_at = completed_at
+        await db.commit()

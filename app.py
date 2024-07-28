@@ -2,36 +2,36 @@ from fastapi import *
 from fastapi.exceptions import RequestValidationError
 from fastapi.staticfiles import StaticFiles
 from controller import attractionId, attractions, buildSchedule, getUser, mrts, orders, signIn, signUp, getSchedule,deleteSchedule,getOrder,google,upload,showPost
-from starlette_session import SessionMiddleware
-from fastapi.middleware.cors import CORSMiddleware
+import redis
+
 from exceptions import *
 from view import staticPages
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 
 app = FastAPI()
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-app.middleware("http")(db_connection)
+def get_redis_connection():
+    return redis.StrictRedis(host="redis", port=6379, db=0)
+
+redis_pool = get_redis_connection()
+
+
+async def redis_connection(request: Request, call_next):
+    request.state.redis_pool = redis_pool
+    response = await call_next(request)
+    return response
+
 app.middleware("http")(redis_connection)
 
 app.add_exception_handler(RequestValidationError, validation_exception_handler)
 app.add_exception_handler(HTTPException, custom_http_exception_handler)
 
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=["*"],
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-# )
-
-# app.add_middleware(
-#     SessionMiddleware,
-#     secret_key="ruruisthebest",
-#     max_age=3600,
-#     cookie_name="session_data",    
-# )
 
 app.include_router(upload.router)
 app.include_router(showPost.router)

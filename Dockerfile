@@ -21,7 +21,7 @@ COPY --from=builder /usr/local/bin /usr/local/bin
 # 複製项目文件
 COPY . .
 
-# 清理不必要的文件和缓存
+# 清理不必要的文件
 RUN apt-get update && \
     apt-get install -y --no-install-recommends libgomp1 && \
     rm -rf /var/lib/apt/lists/* && \

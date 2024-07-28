@@ -4,6 +4,8 @@ from pydantic import BaseModel
 from model.buildSchedule import getBookInfo
 from model.getUser import getUser
 from view.buildSchedule import renderBookInfo
+from sqlalchemy.ext.asyncio import AsyncSession
+from db import get_db
 
 
 router = APIRouter()
@@ -16,7 +18,7 @@ class Booking(BaseModel):
     time: str 
     price: int
 @router.post("/api/booking")
-async def booking(request:Request,book:Booking,token: str= Depends(oauth2_scheme)):
+async def booking(request:Request,book:Booking,token: str= Depends(oauth2_scheme),db:AsyncSession=Depends(get_db)):
     tokenData = getUser(token)
     cart={
         "attraction_id" : book.attractionId,
@@ -24,10 +26,9 @@ async def booking(request:Request,book:Booking,token: str= Depends(oauth2_scheme
         "time" : book.time,
         "price" : book.price
     }
-    db_pool = request.state.db_pool.get("spot")
     redis_pool = request.state.redis_pool
 
-    result = getBookInfo(db_pool,cart,tokenData,redis_pool)
+    result = await getBookInfo(db,cart,tokenData,redis_pool)
     return renderBookInfo(result)
 
    

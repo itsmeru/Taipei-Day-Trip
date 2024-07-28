@@ -1,28 +1,24 @@
 from fastapi import *
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordBearer
-from dotenv import load_dotenv
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 
-load_dotenv()
+
+from models import Comment  
+from db import get_db  
 router = APIRouter()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/user/auth")
 
 @router.get("/api/showPost")
-async def showFile(request:Request,token: str= Depends(oauth2_scheme)):
-    db_pool = request.state.db_pool.get("board")
-    data = []
+async def showFile(token: str= Depends(oauth2_scheme),db: AsyncSession = Depends(get_db)):
     try:
-        with db_pool.get_connection() as con:
-            with con.cursor(dictionary=True) as cursor:
-                cursor.execute("select * from comments order by timestamp DESC")
-                results = cursor.fetchall()
-                if results:
-                    for result in results:
-                        data.append({"text":result["content"],"imageUrl":result["image_url"]})
-                else:
-                    data.append({"text":None})
-            return JSONResponse(content=data)
-            
+        stmt = select(Comment).order_by(Comment.timestamp.desc())
+        results = await db.execute(stmt)
+        comments = results.scalars().all()
+        data = [{"text": result.content, "imageUrl": result.image_url} for result in comments]
+        return JSONResponse(content=data)
     except Exception as e:
-            print(e)
+        print(e)
+        return JSONResponse(content={"success": False, "message": str(e)}, status_code=500)
