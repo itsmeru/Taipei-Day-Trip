@@ -1,0 +1,46 @@
+
+.board-info{
+    padding-bottom: 20px;
+}
+ 
+.pic-btn{
+    font-size: 16px;
+    background-color: azure;
+    border-radius: 10px;
+    width: 50px;
+    height: 30px;
+    cursor: pointer;
+}
+.pic-btn:hover{
+    background-color: wheat;
+}
+.postContainer{
+    width: 1200px;
+    margin: 0 auto;
+    
+   
+}
+.container{
+    width: 350px;
+    height: 350px;
+    border: 1px solid black;
+    text-align: center;
+    margin: 20px;
+}
+.post-img{
+    width: 250px;
+    height: 250px;
+    margin-top: 15px;
+    object-fit: cover;
+}
+.post-text{
+    padding: 10px;
+    font-size: 16px;
+    color:darkcyan;
+}
+.upload-status {
+    margin-top: 10px;
+    font-size: 16px;
+    color: #ff6600;
+    font-weight: bold;
+}

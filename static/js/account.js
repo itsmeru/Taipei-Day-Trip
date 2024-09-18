@@ -58,6 +58,7 @@ async function showMessage(form, message, className, color){
 
 async function logout() {
   localStorage.removeItem("authToken");
+  localStorage.removeItem("googleAuth");
   window.location.reload();
 };
 

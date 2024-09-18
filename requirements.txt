@@ -9,3 +9,11 @@ email-validator
 requests
 redis
 httpx
+boto3
+google-auth
+python-dotenv
+uuid
+sqlalchemy
+aioredis
+aiomysql
+python-multipart

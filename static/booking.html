@@ -12,8 +12,10 @@
   <link rel="stylesheet" type="text/css" href="/static/css/index.css" />
   <link rel="stylesheet" type="text/css" href="/static/css/attraction.css" />
   <link rel="stylesheet" type="text/css" href="/static/css/booking.css" />
- <script src="https://js.tappaysdk.com/sdk/tpdirect/v5.18.0"></script>
- <script type="module" src="/static/js/controller/dom.js" defer></script>
+  <script src="https://accounts.google.com/gsi/client" defer></script>
+
+  <script src="https://js.tappaysdk.com/sdk/tpdirect/v5.18.0"></script>
+  <script type="module" src="/static/js/controller/dom.js" defer></script>
 
   <script src="/static/js/account.js" defer></script>
   <script src="/static/js/tokenCkeck.js" defer></script>
@@ -71,6 +73,12 @@
           <button type="button" onclick="closeDialog('login-dialog'); return false;"><img src="/static/pic/x.png"></button>
         </div>
       </form>
+      <div id="g_id_onload"
+          data-client_id="108619231081-5sc2vtc5ch8g08b4g0lk9lb4svep88nu.apps.googleusercontent.com"
+          data-login_uri="http://localhost:8000"
+          data-redirect_uri="http://localhost:8000/"
+          data-auto_prompt="false">
+      </div>
     </div>
   </dialog>
   <nav>
@@ -80,6 +88,7 @@
         <div class="frame1">
           <button class="nav-btn body font-medium" onclick="bookInfo()">預定行程</button>
           <button class="nav-btn body font-medium" onclick="searchSchedule()">查詢行程</button>
+          <button class="nav-btn body font-medium" onclick="board()">行程討論</button>
           <button class="hidden nav-btn body font-medium" id="login-btn" onclick="openDialog('login-dialog')">登入/註冊</button> 
           <button class="hidden nav-btn body font-medium" id="logout-btn" onclick="logout()">登出系統</button> 
         </div>  
@@ -92,6 +101,7 @@
       <div class="close-icon" onclick="closeMenu()">X</div>
       <button class="nav-btn body font-medium" onclick="bookInfo()">預定行程</button>
       <button class="nav-btn body font-medium" onclick="searchSchedule()">查詢行程</button>
+      <button class="nav-btn body font-medium" onclick="board()">行程討論</button>
       <button class="hidden nav-btn body font-medium" id="mobile-login-btn" onclick="openDialog('login-dialog')">登入/註冊</button> 
       <button class="hidden nav-btn body font-medium" id="mobile-logout-btn" onclick="logout()">登出系統</button>
     </div>

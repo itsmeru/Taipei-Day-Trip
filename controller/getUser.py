@@ -8,7 +8,7 @@ router = APIRouter()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/user/auth")
     
 @router.get("/api/user/auth")
-async def getUsers(request:Request,token: str= Depends(oauth2_scheme)):
+async def getUsers(token: str= Depends(oauth2_scheme)):
     results = getUser(token)
     return renderUser(results)
     

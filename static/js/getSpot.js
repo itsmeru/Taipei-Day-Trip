@@ -8,24 +8,24 @@ let loading = false;
 let current_address = "";
 
 
-async function preloadImages(imageUrls) {
-  try {
-    let promises = imageUrls.map((imageUrl) => {
-      return new Promise((resolve, reject) => {
-        let img = new Image();
-        img.onload = () => resolve(img);
-        img.onerror = (error) => reject(error);
-        img.src = imageUrl;
-      });
-    });
+// async function preloadImages(imageUrls) {
+//   try {
+//     let promises = imageUrls.map((imageUrl) => {
+//       return new Promise((resolve, reject) => {
+//         let img = new Image();
+//         img.onload = () => resolve(img);
+//         img.onerror = (error) => reject(error);
+//         img.src = imageUrl;
+//       });
+//     });
 
-    // 等待所有圖片加載完成
-    await Promise.all(promises);
-    console.log("All preload successful.");
-  } catch (error) {
-    console.error("Failed to preload images:", error);
-  }
-}
+//     // 等待所有圖片加載完成
+//     await Promise.all(promises);
+//     console.log("All preload successful.");
+//   } catch (error) {
+//     console.error("Failed to preload images:", error);
+//   }
+// }
 
 async function getSpot(address = "") {
   if (loading) return;
@@ -48,8 +48,8 @@ async function getSpot(address = "") {
     let data = await res.json();
 
     next_page = data["nextPage"];
-    let imageUrls = data["data"].map(attraction => attraction["images"][0]);
-    await preloadImages(imageUrls);
+    // let imageUrls = data["data"].map(attraction => attraction["images"][0]);
+    // await preloadImages(imageUrls);
 
     for (let i = 0; i < data["data"].length; i++) {
       let attraction = data["data"][i];

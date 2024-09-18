@@ -3,6 +3,9 @@ from fastapi.security import OAuth2PasswordBearer
 from pydantic import BaseModel
 from model.orders import getOrders
 from view.orders import renderOrders
+from sqlalchemy.ext.asyncio import AsyncSession
+from db import get_db
+import os
 
 router = APIRouter()
 
@@ -34,12 +37,11 @@ class CheckInfo(BaseModel):
     prime: str
     order: Order
 @router.post("/api/orders")
-async def orders(request:Request,bookInfo:CheckInfo,token: str= Depends(oauth2_scheme)):
-    db_pool = request.state.db_pool.get("spot")
+async def orders(bookInfo:CheckInfo,token: str= Depends(oauth2_scheme),db:AsyncSession=Depends(get_db)):
     order_data = {
         "prime": bookInfo.prime,
-        "partner_key": "partner_71JD0IlN4Td4dKlAno18sKBDji9PScQ0oM0a0zkj7ZNpNxiSiG3hFzLm",
-        "merchant_id": "tppf_itsmeru_GP_POS_3",
+        "partner_key": os.getenv("PARTNER_KEY"),
+        "merchant_id": os.getenv("MERCHANT_ID"),
         "details": "TapPay Test",
         "amount": bookInfo.order.price,
         "cardholder": {
@@ -52,7 +54,7 @@ async def orders(request:Request,bookInfo:CheckInfo,token: str= Depends(oauth2_s
         "remember": True,
     }
 
-    results = await getOrders(db_pool,token,bookInfo,order_data)
+    results = await getOrders(db,token,bookInfo,order_data)
     return renderOrders(results)
    
 

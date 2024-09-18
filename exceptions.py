@@ -2,16 +2,6 @@ from fastapi import Request, HTTPException
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
-from database import create_db_pool
-
-db_pool = {
-    "spot": create_db_pool("spot"),
-}
-
-async def db_connection(request: Request, call_next):
-    request.state.db_pool = db_pool
-    response = await call_next(request)
-    return response
 
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
     errors = exc.errors()
