@@ -14,11 +14,8 @@ class Account(Base):
 class Comment(Base):
     __tablename__ = 'comments'
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    user_id = Column(Integer, nullable=True)
-    user_name = Column(String(100), nullable=True)
     content = Column(Text, nullable=True)
     image_url = Column(String(255), nullable=True)
-    timestamp = Column(TIMESTAMP, server_default=func.now(), onupdate=func.now(), nullable=False)
 
 class Schedule(Base):
     __tablename__ = 'schedule'
