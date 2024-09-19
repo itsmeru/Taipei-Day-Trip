@@ -155,4 +155,10 @@ set.py
 week13.js
 # docker-compose.yml
 docker.env
+board.html
+board.css
+upload.py
+showPost.py
+sendPost
+
 

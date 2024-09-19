@@ -9,6 +9,9 @@ load_dotenv()
 logging.basicConfig()
 logging.getLogger('sqlalchemy.engine').setLevel(logging.ERROR)
 DATABASE_URL = f"mysql+aiomysql://{os.getenv('RDS_USER')}:{os.getenv('RDS_PASSWORD')}@{os.getenv('RDS_HOST')}:{os.getenv('RDS_PORT')}/{os.getenv('RDS_TPE')}"
+# DATABASE_URL = f"mysql+aiomysql://{os.getenv('RDS_USER')}:{os.getenv('RDS_PASSWORD')}@127.0.0.1:3307/{os.getenv('RDS_TPE')}"
+
+# DATABASE_URL = f"mysql+aiomysql://root:betty520@localhost:3306/spot"
 
 
 

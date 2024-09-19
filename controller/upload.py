@@ -1,20 +1,17 @@
 import mimetypes
 from fastapi import *
 from fastapi.responses import JSONResponse
-from fastapi.security import OAuth2PasswordBearer
 import boto3
 import os
 from pydantic import BaseModel
 from boto3.s3.transfer import TransferConfig
 import uuid
 
-from model.getUser import getUser
 from models import Comment
 from db import get_db
 from sqlalchemy.ext.asyncio import AsyncSession
 
 router = APIRouter()
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/user/auth")
 
 s3_client = boto3.client(
     "s3",
@@ -29,11 +26,8 @@ class checkFile(BaseModel):
     picture: UploadFile
 
 
-@router.post("/api/upload")
-async def upload_file(text: str = Form(...),picture: UploadFile = File(...),token: str= Depends(oauth2_scheme), db: AsyncSession = Depends(get_db)):
-    tokenData = getUser(token)
-    user_id = tokenData["data"]["id"]
-    user_name = tokenData["data"]["name"]
+@router.post("/trip/api/upload")
+async def upload_file(text: str = Form(...),picture: UploadFile = File(...), db: AsyncSession = Depends(get_db)):
 
     try:
         mime_type, _ = mimetypes.guess_type(picture.filename)
@@ -49,8 +43,6 @@ async def upload_file(text: str = Form(...),picture: UploadFile = File(...),toke
         image_url = f"{os.getenv('CLOUDFRONT_DOMAIN')}/{s3_key}"
 
         new_comment = Comment(
-            user_id=user_id,
-            user_name=user_name,
             content=text,
             image_url=image_url
         )
