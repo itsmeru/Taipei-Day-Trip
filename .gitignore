@@ -25,6 +25,19 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+*.log
+
+# 忽略 build 目錄
+/build/
+
+# 忽略 doc/notes.txt，但不忽略 doc/server/arch.txt
+doc/*.txt
+
+# 忽略所有 .pdf 文件在 doc/ 目錄及其子目錄下
+doc/**/*.pdf
+
+# 忽略 .DS_Store 文件
+.DS_Store
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -147,18 +160,21 @@ week.js
 week11.js
 package-lock.json
 commands
+requirements.txt
 test.py
 CPUtest.py
 IOtest.py
 set.py
 # docker-compose-d.yml
 week13.js
-# docker-compose.yml
+docker-compose.yml
 docker.env
 board.html
 board.css
 upload.py
 showPost.py
 sendPost
-
+docker-compose.yml
+Dockerfile
+.dockerignore
 
