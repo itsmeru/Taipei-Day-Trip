@@ -160,5 +160,8 @@ board.css
 upload.py
 showPost.py
 sendPost
-
+docker-compose.yml
+Dockerfile
+requirements.txt
+.dockerignore
 
