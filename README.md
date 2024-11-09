@@ -1,7 +1,11 @@
 # 👋 Hi there, I'm Yen-Ju Liu
 
 ## 🚀 About Me
-- 👨‍💻 Full Stack Developer
+- 👨‍💻 Backend engineer with a Computer Science background
+- 🌱 Passionate learner and enjoys problem-solving
+
+## 📞 Contact
+- 👤 **Yen-Ju Liu**
 - 📧 Email: cat821016@gmail.com
 - 💼 [LinkedIn](https://www.linkedin.com/in/ruru88/)
 
