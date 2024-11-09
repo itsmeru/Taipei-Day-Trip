@@ -1,6 +1,30 @@
-# Taipei Day Trip
+# 👋 Hi there, I'm Yen-Ju Liu
 
+## 🚀 About Me
+- 👨‍💻 Full Stack Developer
+- 📧 Email: cat821016@gmail.com
+- 💼 [LinkedIn](https://www.linkedin.com/in/ruru88/)
+
+## 🏆 Featured Project: Taipei Day Trip
 A comprehensive travel planning and booking platform that streamlines trip scheduling for tourists.
+
+### 🌟 Key Features
+- Attraction search and booking system
+- Secure payment integration
+- Real-time availability checking
+- User authentication and profile management
+
+### 🛠 Technical Highlights
+- **Cloud Infrastructure**: 
+  - AWS EC2 for deployment with Docker containerization
+  - AWS S3 with CDN for optimized image delivery
+  - AWS RDS (MySQL) for database management
+- **Backend**: 
+  - FastAPI for high-performance RESTful APIs
+  - Redis caching for enhanced system performance
+- **Frontend**: 
+  - Responsive design with HTML5, CSS3, and JavaScript
+  - Interactive UI for seamless user experience
 
 ## 🛠 Languages and Tools:
 
@@ -13,9 +37,10 @@ A comprehensive travel planning and booking platform that streamlines trip sched
      <a href="https://www.w3schools.com/css/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original-wordmark.svg" alt="css3" width="40" height="40"/> </a>
      <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" alt="javascript" width="40" height="40"/> </a> 
 
-## Demo
+### 🔗 Live Demo
+[![Taipei Day Trip](https://img.shields.io/badge/View_Demo-FF4081?style=for-the-badge&logo=aboutdotme&logoColor=white)](https://trip.ruru888.com/)
 
- [![portfolio](https://img.shields.io/badge/Taipei_Day_Trip-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://trip.ruru888.com/)
+
 ### Demo Account
 
 - Email: test@gmail.com
@@ -23,7 +48,7 @@ A comprehensive travel planning and booking platform that streamlines trip sched
 
 ![alt text](t1-1.gif)
 
-### Demo credit card 
+#### Test Credentials
 
 - Number: 4242 4242 4242 4242
 - Exp: 04/30
